@@ -1,0 +1,128 @@
+<template>
+  <el-slider
+    :min="0"
+    :max="22"
+    v-model="value"
+    :format-tooltip="formatTooltip"
+    :show-tooltip="false"
+    :step="2"
+    :marks="marks">
+  </el-slider>
+</template>
+
+<script>
+    export default {
+        name: 'TimeSlider',
+        data() {
+            return {
+                value: 8,
+                marks: {
+                  0: {
+                    style: {
+                      color: '#ffffff'
+                    },
+                    label: this.$createElement('strong', '00:00')
+                  },
+                  2: {
+                    style: {
+                      color: '#ffffff'
+                    },
+                    label: this.$createElement('strong', '02:00')
+                  },
+                  4: {
+                    style: {
+                      color: '#ffffff'
+                    },
+                    label: this.$createElement('strong', '04:00')
+                  },
+                  6: {
+                    style: {
+                      color: '#ffffff'
+                    },
+                    label: this.$createElement('strong', '06:00')
+                  },
+                  8: {
+                    style: {
+                      color: '#ffffff'
+                    },
+                    label: this.$createElement('strong', '08:00')
+                  },
+                  10: {
+                    style: {
+                      color: '#ffffff'
+                    },
+                    label: this.$createElement('strong', '10:00')
+                  },
+                  12: {
+                    style: {
+                      color: '#ffffff'
+                    },
+                    label: this.$createElement('strong', '12:00')
+                  },
+                  14: {
+                    style: {
+                      color: '#ffffff'
+                    },
+                    label: this.$createElement('strong', '14:00')
+                  },
+                  16: {
+                    style: {
+                      color: '#ffffff'
+                    },
+                    label: this.$createElement('strong', '16:00')
+                  },
+                  18: {
+                    style: {
+                      color: '#ffffff'
+                    },
+                    label: this.$createElement('strong', '18:00')
+                  },
+                  20: {
+                    style: {
+                      color: '#ffffff'
+                    },
+                    label: this.$createElement('strong', '20:00')
+                  },
+                  22: {
+                    style: {
+                      color: '#ffffff'
+                    },
+                    label: this.$createElement('strong', '22:00')
+                  }
+                }
+            }
+        },
+        props: {},
+        computed: {},
+        watch: {
+            field: function (preVal, newVal) {
+                console.log('改变之前的值：' + preVal + '；改变之后的值：' + newVal)
+            }
+        },
+        created() {
+            console.log('component created')
+        },
+        mounted() {
+            console.log('component mounted')
+        },
+        methods: {
+            getList() {
+            },
+            formatTooltip(val) {
+              return '2019年6月10日 ' + val
+            }
+        },
+        destroyed: function () {
+        },
+        components: {}
+    }
+</script>
+
+<style scoped>
+  .el-slider {
+    position: absolute;
+    width: calc(100% - 100px);
+    left: 50px;
+    bottom: 30px;
+  }
+</style>
