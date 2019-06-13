@@ -3,6 +3,7 @@
 </template>
 
 <script>
+    import Vue from 'vue'
     export default {
         name: 'ZgMap',
         data() {
@@ -33,7 +34,8 @@
                 this.map = L.map('map').setView(config.mapConfig.view.center,config.mapConfig.view.zoom)
                 var layer = L.tileLayer(config.mapConfig.baseLayer.url).addTo(this.map)
                 layer.on('load', function (e) {
-                  that.$store.dispatch('actionMapState', true)
+                  that.$store.dispatch('ACTION_MAP_STATE', true)
+                  Vue.prototype.$Maps = that.map
                 })
             }
         },

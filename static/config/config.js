@@ -7,9 +7,12 @@ var config = {
     },
     baseLayer: {
       url: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-    },
-    services: {
-
+    }
+  },
+  services: {
+    baseUrl: 'http://localhost:8800',
+    wind: {
+      windData: '/wind/list'
     }
   }
 }

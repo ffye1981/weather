@@ -8,7 +8,8 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
 		},
 		maxVelocity: 10, // used to align color scale
 		colorScale: null,
-		bounds: null
+		bounds: null,
+    sampleCnt: 1000
 	},
 
 	_map: null,
@@ -37,6 +38,7 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
 	},
 
 	setData: function setData(windData) {
+	      this.options.data = windData;
         this._startWindy();
 	},
 
@@ -79,14 +81,14 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
 		// prepare context global var, start drawing
 		this._context = this._canvasLayer._canvas.getContext('2d');
 		this._canvasLayer._canvas.classList.add("velocity-overlay");
-		//this.onDrawLayer();
+		// this.onDrawLayer();
 
-		this._map.on('dragstart', self._windy.stop);
-		this._map.on('dragend', self._clearAndRestart);
-		this._map.on('zoomstart', self._windy.stop);
-		this._map.on('zoomend', self._clearAndRestart);
-		this._map.on('resize', self._clearWind);
-        this._map.on('resize', self._clearAndRestart);
+		// this._map.on('dragstart', self._windy.stop);
+		// this._map.on('dragend', self._clearAndRestart);
+		// this._map.on('zoomstart', self._windy.stop);
+		// this._map.on('zoomend', self._clearAndRestart);
+		// this._map.on('resize', self._clearWind);
+		// this._map.on('resize', self._clearAndRestart);
 		this._initMouseHandler();
 	},
 
@@ -119,18 +121,36 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
 	_invertData: function setData() {
         this._windData = [];
         if(this.options.data) {
-            var that = this;
-            this.options.data.forEach(function (wd) {
-                var px = that._map.latLngToContainerPoint([wd[0], wd[1]]);
-                var x = px.x;
-                var y = px.y;
-                var angle = wd[2];
-                var speed = wd[3];
-                that._windData.push({
-                    x,y,angle,speed
-                });
-            });
+          var that = this;
+          //采样
+          var rate = this.options.sampleCnt <= 1? 1: this.options.data.length/this.options.sampleCnt
+          rate = rate< 1?1:rate;
+          var length = Math.min(this.options.sampleCnt,this.options.data.length)
+          for(var i=0;i<length;i++) {
+            var wd = this.options.data[Math.round(i*rate)]
+            var px = that._map.latLngToContainerPoint([wd.lats, wd.lons]);
+            var x = px.x;
+            var y = px.y;
+            var angle = wd.direction;
+            var speed = wd.speed;
+            that._windData.push({
+              x,y,angle,speed
+            })
+          }
         }
+        // if(this.options.data) {
+        //     var that = this;
+        //     this.options.data.forEach(function (wd) {
+        //         var px = that._map.latLngToContainerPoint([wd.lats, wd.lons]);
+        //         var x = px.x;
+        //         var y = px.y;
+        //         var angle = wd.direction;
+        //         var speed = wd.speed;
+        //         that._windData.push({
+        //             x,y,angle,speed
+        //         });
+        //     });
+        // }
     },
     _getBounds: function() {
         return this.options.bounds || this._map.getBounds();

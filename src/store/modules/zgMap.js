@@ -1,5 +1,5 @@
 /**
- * Created by FDD on 2017/9/14.
+ * Created by yeff
  * @desc 地图及地图工具store
  */
 
@@ -19,7 +19,7 @@ const getters = {
 
 // actions
 const actions = {
-  actionMapState ({commit, state}, param) {
+  ACTION_MAP_STATE ({commit, state}, param) {
     commit(SET_MAP_LOAD_STATE, param)
   }
 }

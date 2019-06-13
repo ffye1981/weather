@@ -71,7 +71,7 @@ L.Control.Velocity = L.Control.extend({
         var self = this;
 	    //var pos = this.options.leafletVelocity._map.containerPointToLatLng(L.point(e.containerPoint.x, e.containerPoint.y));
 	    var gridValue = this.options.leafletVelocity._windy.interpolatePoint(e.containerPoint.x, e.containerPoint.y);
-	    console.log(gridValue);
+	    // console.log(gridValue);
 	    var htmlOut = "";
 
 	    if(gridValue && !isNaN(gridValue.angle) && !isNaN(gridValue.speed)) {

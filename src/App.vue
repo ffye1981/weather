@@ -2,18 +2,21 @@
   <div id="app">
     <zg-map></zg-map>
     <time-slider></time-slider>
+    <wind></wind>
   </div>
 </template>
 
 <script>
   import zgMap from './components/common/ZgMap'
   import timeSlider from './components/common/TimeSlider'
+  import wind from './components/wind/Wind'
 
   export default {
       name: 'App',
       components: {
         zgMap,
-        timeSlider
+        timeSlider,
+        wind
       }
   }
 </script>

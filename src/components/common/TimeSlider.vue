@@ -6,7 +6,9 @@
     :format-tooltip="formatTooltip"
     :show-tooltip="false"
     :step="2"
-    :marks="marks">
+    :marks="marks"
+    @change="change"
+  >
   </el-slider>
 </template>
 
@@ -106,7 +108,14 @@
             console.log('component mounted')
         },
         methods: {
-            getList() {
+            change(val) {
+              var date = new Date();
+              var year = date.getFullYear().toString();
+              var month =date.getMonth() + 1;
+              var day = date.getDate();
+              var dateStr = year + '-' + (month < 10 ? '0' + month.toString() : month.toString()) + '-' + (day < 10 ? '0' + day : day) + ' ' + (val < 10 ? '0'+ val: val) + ':00:00'
+              // console.log('val change:' + dateStr)
+              this.$store.dispatch('ACTION_PLAY_TIME', dateStr)
             },
             formatTooltip(val) {
               return '2019年6月10日 ' + val

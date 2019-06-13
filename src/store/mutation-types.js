@@ -1,7 +1,11 @@
 // 地图
 const SET_MAP_LOAD_STATE = 'SET_MAP_LOAD_STATE'
 
+//时间控件
+const SET_PLAY_TIME = 'SET_PLAY_TIME'
+
 //地图
 export {
   SET_MAP_LOAD_STATE,
+  SET_PLAY_TIME
 }
