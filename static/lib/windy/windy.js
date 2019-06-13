@@ -179,7 +179,6 @@ var Windy = function (options) {
   };
 
   var start = function (extent, dataPoints) {
-    stop();
     buildBounds(extent, function (bounds) {
       interpolateGrid(bounds, dataPoints, function (bounds, vector) {
         windy.vector = vector;

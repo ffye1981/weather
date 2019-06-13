@@ -15,6 +15,7 @@
                 {lats:40.556703,lons:115.687349, direction:180, speed:0.5754},
                 {lats:40.668869,lons:117.72025, direction:270, speed:5.1799}
               ],
+              // windData:[],
               velocityLayer: null,
               heatLayer: null,
               lyrGroup: L.layerGroup([])
@@ -29,10 +30,10 @@
         },
         watch: {
           playTime: function (newVal, preVal) {
-              console.log('playTime改变之前的值：' + preVal + '；改变之后的值：' + newVal)
+              // console.log('playTime改变之前的值：' + preVal + '；改变之后的值：' + newVal)
           },
           loadMapSuccess: function (newVal, preVal) {
-              console.log('loadMapSuccess改变之前的值：' + preVal + '；改变之后的值：' + newVal)
+              // console.log('loadMapSuccess改变之前的值：' + preVal + '；改变之后的值：' + newVal)
               if(newVal) {
                 this.$Maps.addLayer(this.lyrGroup);
                 this.initLayer()
@@ -46,10 +47,10 @@
           }
         },
         created() {
-            console.log('component created')
+            // console.log('component created')
         },
         mounted() {
-            console.log('component mounted')
+            // console.log('component mounted')
             //this.getData()
         },
         methods: {
@@ -74,8 +75,8 @@
                   data: this.windData,
                   lineStyle: 'rgba(255,255,255,0.8)',
                   lineWidth: 0.8,
-                  frameRate: 2,
-                  sampleCnt: 500
+                  frameRate: 2.0,
+                  sampleCnt: 2000
               });
               this.velocityLayer.addTo(this.$Maps);
             },

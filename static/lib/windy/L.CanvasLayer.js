@@ -51,7 +51,7 @@ L.CanvasLayer = (L.Layer ? L.Layer : L.Class).extend({
 		this._canvas.height = resizeEvent.newSize.y;
 		var del = this._delegate || this;
 		del.reDrawLayer();
-		del.onDrawLayer();
+		del._startWindyShake();
 	},
 	//-------------------------------------------------------------
 	_onLayerDidMove: function () {
@@ -74,7 +74,7 @@ L.CanvasLayer = (L.Layer ? L.Layer : L.Class).extend({
 	},
 	//-------------------------------------------------------------
 	onAdd: function (map) {
-    console.log('CanvasLayer onAdd....')
+    // console.log('CanvasLayer onAdd....')
 		this._map = map;
 		this._canvas = L.DomUtil.create('canvas', 'leaflet-layer');
 		this.tiles = {};

@@ -9,7 +9,7 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
 		maxVelocity: 10, // used to align color scale
 		colorScale: null,
 		bounds: null,
-    sampleCnt: 1000
+    sampleCnt: 500
 	},
 
 	_map: null,
@@ -42,18 +42,19 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
 
 	setData: function setData(windData) {
 	      this.options.data = windData;
-        this._startWindy();
+        this._clearWind();
+        this._startWindyShake();
 	},
 
 	/*------------------------------------ PRIVATE ------------------------------------------*/
   _startWindyShake: function(overlay, params) {
-	    console.log('VelocityLayer onDrawLayer....')
+	    // console.log('VelocityLayer onDrawLayer....')
     // 防止多次执行
     clearTimeout(this._shakeTimer);
 		var that = this;
     this._shakeTimer = setTimeout(function(){
       that._startWindy();
-    }, 1000);
+    }, 100);
 
 	},
   reDrawLayer: function(){
@@ -62,7 +63,7 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
       this._initWindy(this);
   },
 	_startWindy: function() {
-    console.log('VelocityLayer _startWindy....')
+    // console.log('VelocityLayer _startWindy....' + new Date().getTime())
 		var bounds = this._getBounds();
 		var _min = [bounds._southWest.lat, bounds._southWest.lng];
         var _max = [bounds._northEast.lat, bounds._northEast.lng];
@@ -120,7 +121,7 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
 		this._map.removeLayer(this._canvasLayer);
 	},
 	_invertData: function setData() {
-    console.log('VelocityLayer _invertData....')
+        var start = new Date().getTime();
         this._windData = [];
         if(this.options.data) {
           var that = this;
@@ -140,6 +141,7 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
             })
           }
         }
+        console.log('VelocityLayer _invertData....' + (new Date().getTime() - start));
         // if(this.options.data) {
         //     var that = this;
         //     this.options.data.forEach(function (wd) {
