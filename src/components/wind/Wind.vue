@@ -15,9 +15,9 @@
                 {lats:40.556703,lons:115.687349, direction:180, speed:0.5754},
                 {lats:40.668869,lons:117.72025, direction:270, speed:5.1799}
               ],
-              // windData: [],
               velocityLayer: null,
-              heatLayer: null
+              heatLayer: null,
+              lyrGroup: L.layerGroup([])
             }
         },
         props: {},
@@ -34,6 +34,7 @@
           loadMapSuccess: function (newVal, preVal) {
               console.log('loadMapSuccess改变之前的值：' + preVal + '；改变之后的值：' + newVal)
               if(newVal) {
+                this.$Maps.addLayer(this.lyrGroup);
                 this.initLayer()
               }
           },
@@ -73,7 +74,8 @@
                   data: this.windData,
                   lineStyle: 'rgba(255,255,255,0.8)',
                   lineWidth: 0.8,
-                  frameRate: 2
+                  frameRate: 2,
+                  sampleCnt: 500
               });
               this.velocityLayer.addTo(this.$Maps);
             },
@@ -105,11 +107,12 @@
                   popupAnchor: [0, -10] // point from which the popup should open relative to the iconAnchor
                 });
 
-                const oMarker = L.marker(latlng, { icon: greenIcon }).addTo(that.$Maps);
+                const oMarker = L.circle(latlng, {radius: 200});
                 // 绑定一个提示标签
                 oMarker.bindTooltip('<p>'+dir+ ','+speed+'</p>', { direction: 'left', offset: [0, 0] });
-
+                that.lyrGroup.addLayer(oMarker);
               }
+              this.lyrGroup.clearLayers();
               for(var i=0;i<this.windData.length;i++){
                 drawcircle([this.windData[i].lats,this.windData[i].lons],this.windData[i].direction,this.windData[i].speed);
               }

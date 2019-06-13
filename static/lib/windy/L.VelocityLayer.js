@@ -18,22 +18,25 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
 	_context: null,
 	_mouseControl: null,
 	_windData: null,
+  _shakeTimer: null,
 
 	initialize: function(options) {
-	    console.log('initialize....')
+	    // console.log('VelocityLayer initialize....')
 		L.setOptions(this, options);
 	},
 
 	onAdd: function(map) {
-	    console.log('onAdd....')
+	    // console.log('VelocityLayer onAdd....')
 		// create canvas, add overlay control
 		this._canvasLayer = L.canvasLayer().delegate(this);
 		this._canvasLayer.addTo(map);
 		this._map = map;
+    this._initWindy(this);
+    this._startWindy();
 	},
 
 	onRemove: function(map) {
-	    console.log('onRemove....')
+	    // console.log('VelocityLayer onRemove....')
 		this._destroyWind();
 	},
 
@@ -43,23 +46,23 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
 	},
 
 	/*------------------------------------ PRIVATE ------------------------------------------*/
-	onDrawLayer: function(overlay, params) {
-	    console.log('onDrawLayer....')
-		var self = this;
-		if (!this._windy) {
-			this._initWindy(this);
-		}
-		if (!this.options.data) {
-			return;
-		}
-		this._startWindy();
+  _startWindyShake: function(overlay, params) {
+	    console.log('VelocityLayer onDrawLayer....')
+    // 防止多次执行
+    clearTimeout(this._shakeTimer);
+		var that = this;
+    this._shakeTimer = setTimeout(function(){
+      that._startWindy();
+    }, 1000);
+
 	},
-    reDrawLayer: function(){
-        this._destroyWind();
-        this.onAdd(this._map);
-        this._initWindy(this);
-    },
+  reDrawLayer: function(){
+      this._destroyWind();
+      this.onAdd(this._map);
+      this._initWindy(this);
+  },
 	_startWindy: function() {
+    console.log('VelocityLayer _startWindy....')
 		var bounds = this._getBounds();
 		var _min = [bounds._southWest.lat, bounds._southWest.lng];
         var _max = [bounds._northEast.lat, bounds._northEast.lng];
@@ -81,14 +84,12 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
 		// prepare context global var, start drawing
 		this._context = this._canvasLayer._canvas.getContext('2d');
 		this._canvasLayer._canvas.classList.add("velocity-overlay");
-		// this.onDrawLayer();
 
-		// this._map.on('dragstart', self._windy.stop);
-		// this._map.on('dragend', self._clearAndRestart);
-		// this._map.on('zoomstart', self._windy.stop);
-		// this._map.on('zoomend', self._clearAndRestart);
-		// this._map.on('resize', self._clearWind);
-		// this._map.on('resize', self._clearAndRestart);
+		this._map.on('dragstart', self._clearWind.bind(self));
+    this._map.on('dragend', self._startWindyShake.bind(self));
+    this._map.on('zoomstart', self._clearWind.bind(self));
+    this._map.on('zoomend', self._startWindyShake.bind(self));
+    //this._map.on('resize', self._clearAndRestart);
 		this._initMouseHandler();
 	},
 
@@ -119,6 +120,7 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
 		this._map.removeLayer(this._canvasLayer);
 	},
 	_invertData: function setData() {
+    console.log('VelocityLayer _invertData....')
         this._windData = [];
         if(this.options.data) {
           var that = this;

@@ -46,6 +46,7 @@ L.CanvasLayer = (L.Layer ? L.Layer : L.Class).extend({
 
 	//-------------------------------------------------------------
 	_onLayerDidResize: function (resizeEvent) {
+    // console.log('CanvasLayer _onLayerDidResize....')
 		this._canvas.width = resizeEvent.newSize.x;
 		this._canvas.height = resizeEvent.newSize.y;
 		var del = this._delegate || this;
@@ -54,9 +55,10 @@ L.CanvasLayer = (L.Layer ? L.Layer : L.Class).extend({
 	},
 	//-------------------------------------------------------------
 	_onLayerDidMove: function () {
+    // console.log('CanvasLayer _onLayerDidMove....')
 		var topLeft = this._map.containerPointToLayerPoint([0, 0]);
 		L.DomUtil.setPosition(this._canvas, topLeft);
-		this.drawLayer();
+		 //this.drawLayer();
 	},
 	//-------------------------------------------------------------
 	getEvents: function () {
@@ -72,6 +74,7 @@ L.CanvasLayer = (L.Layer ? L.Layer : L.Class).extend({
 	},
 	//-------------------------------------------------------------
 	onAdd: function (map) {
+    console.log('CanvasLayer onAdd....')
 		this._map = map;
 		this._canvas = L.DomUtil.create('canvas', 'leaflet-layer');
 		this.tiles = {};
@@ -89,7 +92,7 @@ L.CanvasLayer = (L.Layer ? L.Layer : L.Class).extend({
 
 		var del = this._delegate || this;
 		del.onLayerDidMount && del.onLayerDidMount(); // -- callback
-		this.needRedraw();
+		// this.needRedraw();
 
 		var self = this;
 		setTimeout(function(){
@@ -101,14 +104,9 @@ L.CanvasLayer = (L.Layer ? L.Layer : L.Class).extend({
 	onRemove: function (map) {
 		var del = this._delegate || this;
 		del.onLayerWillUnmount && del.onLayerWillUnmount(); // -- callback
-
-
 		map.getPanes().overlayPane.removeChild(this._canvas);
-
 		map.off(this.getEvents(),this);
-
 		this._canvas = null;
-
 	},
 
 	//------------------------------------------------------------
@@ -163,11 +161,8 @@ L.CanvasLayer = (L.Layer ? L.Layer : L.Class).extend({
 		var scale = this._map.getZoomScale(e.zoom);
 		// -- different calc of offset in leaflet 1.0.0 and 0.0.7 thanks for 1.0.0-rc2 calc @jduggan1
 		var offset = L.Layer ? this._map._latLngToNewLayerPoint(this._map.getBounds().getNorthWest(), e.zoom, e.center) :
-			this._map._getCenterOffset(e.center)._multiplyBy(-scale).subtract(this._map._getMapPanePos());
-
+      this._map._getCenterOffset(e.center)._multiplyBy(-scale).subtract(this._map._getMapPanePos());
 		L.DomUtil.setTransform(this._canvas, offset, scale);
-
-
 	}
 });
 
