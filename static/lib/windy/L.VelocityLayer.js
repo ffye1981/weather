@@ -54,7 +54,7 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
 		var that = this;
     this._shakeTimer = setTimeout(function(){
       that._startWindy();
-    }, 100);
+    }, 700);
 
 	},
   reDrawLayer: function(){

@@ -1,5 +1,5 @@
 <template>
-  <el-button @click="getData">默认按钮</el-button>
+  <!--<el-button @click="getData">默认按钮</el-button>-->
 </template>
 
 <script>
@@ -9,13 +9,13 @@
         name: 'Wind',
         data() {
             return {
-              windData: [
-                {lats:39.966493,lons:116.332979,direction:0,speed:0.8},
-                {lats:39.961627,lons:116.749793, direction:90, speed:1.8728},
-                {lats:40.556703,lons:115.687349, direction:180, speed:0.5754},
-                {lats:40.668869,lons:117.72025, direction:270, speed:5.1799}
-              ],
-              // windData:[],
+              // windData: [
+              //   {lats:39.966493,lons:116.332979,direction:0,speed:0.8},
+              //   {lats:39.961627,lons:116.749793, direction:90, speed:1.8728},
+              //   {lats:40.556703,lons:115.687349, direction:180, speed:0.5754},
+              //   {lats:40.668869,lons:117.72025, direction:270, speed:5.1799}
+              // ],
+              windData:[],
               velocityLayer: null,
               heatLayer: null,
               lyrGroup: L.layerGroup([])
@@ -37,6 +37,7 @@
               if(newVal) {
                 this.$Maps.addLayer(this.lyrGroup);
                 this.initLayer()
+                this.getData()
               }
           },
           windData: function (newVal, preVal) {
@@ -51,7 +52,7 @@
         },
         mounted() {
             // console.log('component mounted')
-            //this.getData()
+            // this.getData()
         },
         methods: {
             initLayer() {
@@ -75,8 +76,8 @@
                   data: this.windData,
                   lineStyle: 'rgba(255,255,255,0.8)',
                   lineWidth: 0.8,
-                  frameRate: 2.0,
-                  sampleCnt: 2000
+                  frameRate: 1,
+                  sampleCnt: 200
               });
               this.velocityLayer.addTo(this.$Maps);
             },
@@ -93,8 +94,8 @@
                   ]
                 });
                 var that = this
-                //.$http.getData('static/data/response_1000.json',{time: this.playTime,wkt:polygon}, {}, function (data, msg) {
-                  this.$http.getData(config.services.baseUrl + config.services.wind.windData, {time: this.playTime,wkt:polygon}, {}, function (data, msg) {
+                this.$http.getData('static/data/response_1000.json',{time: this.playTime,wkt:polygon}, {}, function (data, msg) {
+                  //this.$http.getData(config.services.baseUrl + config.services.wind.windData, {time: this.playTime,wkt:polygon}, {}, function (data, msg) {
                     that.windData = data;
                 })
             },
