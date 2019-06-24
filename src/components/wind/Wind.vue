@@ -69,29 +69,6 @@
                   maxVelocity: 15
                 });
 
-              //   this.velocityLayer = L.velocityLayer({
-              //       displayValues: true,
-              //       displayOptions: {
-              //           velocityType: 'GBR Wind',
-              //           displayPosition: 'bottomleft',
-              //           displayEmptyString: 'No wind data'
-              //       },
-              //       // bounds: {
-              //       //     _northEast: {
-              //       //         lng: 118.078998,
-              //       //         lat: 40.854662
-              //       //     },
-              //       //     _southWest: {
-              //       //         lng: 115.209019,
-              //       //         lat: 39.221447
-              //       //     }
-              //       // },
-              //     data: this.windData,
-              //     lineStyle: 'rgba(255,255,255,0.8)',
-              //     lineWidth: 0.8,
-              //     frameRate: 1,
-              //     sampleCnt: 200
-              // });
               this.velocityLayer.addTo(this.$Maps);
             },
             getData() {

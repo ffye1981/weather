@@ -29,11 +29,89 @@
             getList() {
             },
             initMap(){
-                // console.log(config.mapConfig.view.center)
                 var that = this
-                this.map = L.map('map').setView(config.mapConfig.view.center,config.mapConfig.view.zoom)
-                var layer = L.tileLayer(config.mapConfig.baseLayer.url).addTo(this.map)
-                layer.on('load', function (e) {
+                /**
+                 * 智图地图内容
+                 */
+                // var normalm1 = L.tileLayer.chinaProvider('Geoq.Normal.Map', {
+                //   maxZoom: 18,
+                //   minZoom: 5
+                // });
+                // var normalm2 = L.tileLayer.chinaProvider('Geoq.Normal.Color', {
+                //   maxZoom: 18,
+                //   minZoom: 5
+                // });
+                var normalm3 = L.tileLayer.chinaProvider('Geoq.Normal.PurplishBlue', {
+                  maxZoom: 18,
+                  minZoom: 4
+                });
+                // var normalm4 = L.tileLayer.chinaProvider('Geoq.Normal.Gray', {
+                //   maxZoom: 18,
+                //   minZoom: 5
+                // });
+                // var normalm5 = L.tileLayer.chinaProvider('Geoq.Normal.Warm', {
+                //   maxZoom: 18,
+                //   minZoom: 5
+                // });
+                // var normalm6 = L.tileLayer.chinaProvider('Geoq.Normal.Cold', {
+                //   maxZoom: 18,
+                //   minZoom: 5
+                // });
+                // /**
+                //  * 天地图内容
+                //  */
+                // var normalm = L.tileLayer.chinaProvider('TianDiTu.Normal.Map', {
+                //   maxZoom: 18,
+                //   minZoom: 5
+                // }),
+                // normala = L.tileLayer.chinaProvider('TianDiTu.Normal.Annotion', {
+                //   maxZoom: 18,
+                //   minZoom: 5
+                // }),
+                // imgm = L.tileLayer.chinaProvider('TianDiTu.Satellite.Map', {
+                //   maxZoom: 18,
+                //   minZoom: 5
+                // }),
+                // imga = L.tileLayer.chinaProvider('TianDiTu.Satellite.Annotion', {
+                //   maxZoom: 18,
+                //   minZoom: 5
+                // });
+
+                // var normal = L.layerGroup([normalm, normala]),
+                //   image = L.layerGroup([imgm, imga]);
+                // /**
+                //  * 谷歌
+                //  */
+                // var normalMap = L.tileLayer.chinaProvider('Google.Normal.Map', {
+                //     maxZoom: 18,
+                //     minZoom: 5
+                //   }),
+                //   satelliteMap = L.tileLayer.chinaProvider('Google.Satellite.Map', {
+                //     maxZoom: 18,
+                //     minZoom: 5
+                //   });
+                /**
+                 * 高德地图
+                 */
+                // var Gaode = L.tileLayer.chinaProvider('GaoDe.Normal.Map', {
+                //   maxZoom: 18,
+                //   minZoom: 5
+                // });
+                // var Gaodimgem = L.tileLayer.chinaProvider('GaoDe.Satellite.Map', {
+                //   maxZoom: 18,
+                //   minZoom: 4
+                // });
+                // var Gaodimga = L.tileLayer.chinaProvider('GaoDe.Satellite.Annotion', {
+                //   maxZoom: 18,
+                //   minZoom: 4
+                // });
+                // var Gaodimage = L.layerGroup([Gaodimgem, Gaodimga]);
+                this.map = L.map('map',{
+                  layers: [normalm3],
+                  zoomControl: true
+                }).setView(config.mapConfig.view.center,config.mapConfig.view.zoom)
+                // var layer = L.tileLayer(config.mapConfig.baseLayer.url).addTo(this.map)
+                normalm3.on('load', function (e) {
                   that.$store.dispatch('ACTION_MAP_STATE', true)
                   Vue.prototype.$Maps = that.map
                 })
