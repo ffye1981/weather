@@ -1,5 +1,5 @@
 <template>
-  <!--<el-button @click="getData">默认按钮</el-button>-->
+  <el-button @click="getNextData">默认按钮</el-button>
 </template>
 
 <script>
@@ -36,13 +36,15 @@
               // console.log('loadMapSuccess改变之前的值：' + preVal + '；改变之后的值：' + newVal)
               if(newVal) {
                 this.$Maps.addLayer(this.lyrGroup);
-                this.initLayer()
+                // this.initLayer()
                 this.getData()
               }
           },
           windData: function (newVal, preVal) {
               if(this.velocityLayer) {
                  this.velocityLayer.setData(newVal)
+              }else {
+                this.initLayer()
               }
               //this.drawPoint();
           }
@@ -56,29 +58,40 @@
         },
         methods: {
             initLayer() {
-                this.velocityLayer = L.velocityLayer({
-                    displayValues: true,
-                    displayOptions: {
-                        velocityType: 'GBR Wind',
-                        displayPosition: 'bottomleft',
-                        displayEmptyString: 'No wind data'
-                    },
-                    // bounds: {
-                    //     _northEast: {
-                    //         lng: 118.078998,
-                    //         lat: 40.854662
-                    //     },
-                    //     _southWest: {
-                    //         lng: 115.209019,
-                    //         lat: 39.221447
-                    //     }
-                    // },
+              this.velocityLayer = L.velocityLayer({
+                  displayValues: true,
+                  displayOptions: {
+                    velocityType: 'Global Wind',
+                    displayPosition: 'bottomleft',
+                    displayEmptyString: 'No wind data'
+                  },
                   data: this.windData,
-                  lineStyle: 'rgba(255,255,255,0.8)',
-                  lineWidth: 0.8,
-                  frameRate: 1,
-                  sampleCnt: 200
-              });
+                  maxVelocity: 15
+                });
+
+              //   this.velocityLayer = L.velocityLayer({
+              //       displayValues: true,
+              //       displayOptions: {
+              //           velocityType: 'GBR Wind',
+              //           displayPosition: 'bottomleft',
+              //           displayEmptyString: 'No wind data'
+              //       },
+              //       // bounds: {
+              //       //     _northEast: {
+              //       //         lng: 118.078998,
+              //       //         lat: 40.854662
+              //       //     },
+              //       //     _southWest: {
+              //       //         lng: 115.209019,
+              //       //         lat: 39.221447
+              //       //     }
+              //       // },
+              //     data: this.windData,
+              //     lineStyle: 'rgba(255,255,255,0.8)',
+              //     lineWidth: 0.8,
+              //     frameRate: 1,
+              //     sampleCnt: 200
+              // });
               this.velocityLayer.addTo(this.$Maps);
             },
             getData() {
@@ -94,11 +107,29 @@
                   ]
                 });
                 var that = this
-                this.$http.getData('static/data/response_1000.json',{time: this.playTime,wkt:polygon}, {}, function (data, msg) {
+                this.$http.getData('static/data/gfs.t00z.pgrb2.1p00.f0.json',{time: this.playTime,wkt:polygon}, {}, function (data, msg) {
                   //this.$http.getData(config.services.baseUrl + config.services.wind.windData, {time: this.playTime,wkt:polygon}, {}, function (data, msg) {
                     that.windData = data;
                 })
             },
+          getNextData() {
+            var bounds = this.$Maps.getBounds();
+            var polygon = Terraformer.WKT.convert({
+              "type": "Polygon",
+              "coordinates": [
+                [ [bounds._northEast.lng, bounds._northEast.lat],
+                  [bounds._northEast.lng, bounds._southWest.lat],
+                  [bounds._southWest.lng, bounds._southWest.lat],
+                  [bounds._southWest.lng, bounds._northEast.lat],
+                  [bounds._northEast.lng, bounds._northEast.lat] ]
+              ]
+            });
+            var that = this
+            this.$http.getData('static/data/gfs.t00z.pgrb2.1p00.f2.json',{time: this.playTime,wkt:polygon}, {}, function (data, msg) {
+              //this.$http.getData(config.services.baseUrl + config.services.wind.windData, {time: this.playTime,wkt:polygon}, {}, function (data, msg) {
+              that.windData = data;
+            })
+          },
             drawPoint() {
               var that = this
               function drawcircle(latlng,dir,speed){
