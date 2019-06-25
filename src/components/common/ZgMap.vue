@@ -43,7 +43,7 @@
                 // });
                 var normalm3 = L.tileLayer.chinaProvider('Geoq.Normal.PurplishBlue', {
                   maxZoom: 18,
-                  minZoom: 4
+                  minZoom: 3
                 });
                 // var normalm4 = L.tileLayer.chinaProvider('Geoq.Normal.Gray', {
                 //   maxZoom: 18,

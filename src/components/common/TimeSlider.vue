@@ -17,7 +17,8 @@
         name: 'TimeSlider',
         data() {
             return {
-                value: 8,
+                value: 0,
+                index: 0,
                 marks: {
                   0: {
                     style: {
@@ -91,7 +92,8 @@
                     },
                     label: this.$createElement('strong', '22:00')
                   }
-                }
+                },
+                timer: null
             }
         },
         props: {},
@@ -106,8 +108,28 @@
         },
         mounted() {
             console.log('component mounted')
+            this.calValue()
+            this.play()
         },
         methods: {
+            play() {
+                var that = this
+                this.timer = setInterval(() => {
+                  that.calValue()
+                }, 20000)
+            },
+            stop() {
+              clearInterval(this.timer)
+            },
+            calValue() {
+              let keys = Object.keys(this.marks)
+              this.value = parseInt(Object.keys(this.marks)[this.index])
+              this.change(this.value);
+              this.index = this.index + 1
+              if(this.index == keys.length) {
+                this.index = 0
+              }
+            },
             change(val) {
               var date = new Date();
               var year = date.getFullYear().toString();
@@ -122,6 +144,7 @@
             }
         },
         destroyed: function () {
+          stop()
         },
         components: {}
     }

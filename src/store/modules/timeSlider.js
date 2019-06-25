@@ -27,7 +27,7 @@ const actions = {
 // mutations
 const mutations = {
   [SET_PLAY_TIME] (state, data) {
-    state.loadMapSuccess = data
+    state.playTime = data
   }
 }
 

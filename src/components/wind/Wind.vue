@@ -9,14 +9,26 @@
         name: 'Wind',
         data() {
             return {
-              // windData: [
-              //   {lats:39.966493,lons:116.332979,direction:0,speed:0.8},
-              //   {lats:39.961627,lons:116.749793, direction:90, speed:1.8728},
-              //   {lats:40.556703,lons:115.687349, direction:180, speed:0.5754},
-              //   {lats:40.668869,lons:117.72025, direction:270, speed:5.1799}
-              // ],
               windData:[],
               velocityLayer: null,
+              heatCfg: {
+                // radius should be small ONLY if scaleRadius is true (or small radius is intended)
+                // if scaleRadius is false it will be the constant radius used in pixels
+                "radius": 2,
+                "maxOpacity": .8,
+                // scales the radius based on map zoom
+                "scaleRadius": true,
+                // if set to false the heatmap uses the global maximum for colorization
+                // if activated: uses the data maximum within the current map boundaries
+                //   (there will always be a red spot with useLocalExtremas true)
+                "useLocalExtrema": true,
+                // which field name in your data represents the latitude - default "lat"
+                latField: 'lats',
+                // which field name in your data represents the longitude - default "lng"
+                lngField: 'lons',
+                // which field name in your data represents the data value - default "value"
+                valueField: 'speed'
+              },
               heatLayer: null,
               lyrGroup: L.layerGroup([])
             }
@@ -30,19 +42,24 @@
         },
         watch: {
           playTime: function (newVal, preVal) {
-              // console.log('playTime改变之前的值：' + preVal + '；改变之后的值：' + newVal)
+              console.log('playTime改变之前的值：' + preVal + '；改变之后的值：' + newVal)
+              var hour = new Date(Date.parse(newVal.replace(/-/g, "/"))).getHours();
+              if(this.velocityLayer) {
+                this.getData(hour)
+              }
           },
           loadMapSuccess: function (newVal, preVal) {
               // console.log('loadMapSuccess改变之前的值：' + preVal + '；改变之后的值：' + newVal)
               if(newVal) {
                 this.$Maps.addLayer(this.lyrGroup);
                 // this.initLayer()
-                this.getData()
+                this.getData(0)
               }
           },
           windData: function (newVal, preVal) {
               if(this.velocityLayer) {
                  this.velocityLayer.setData(newVal)
+                 this.heatLayer.setGribData(newVal)
               }else {
                 this.initLayer()
               }
@@ -58,6 +75,9 @@
         },
         methods: {
             initLayer() {
+              this.heatLayer = new HeatmapOverlay(this.heatCfg);
+              this.heatLayer.addTo(this.$Maps);
+              this.heatLayer.setGribData(this.windData);
               this.velocityLayer = L.velocityLayer({
                   displayValues: true,
                   displayOptions: {
@@ -66,47 +86,59 @@
                     displayEmptyString: 'No wind data'
                   },
                   data: this.windData,
-                  maxVelocity: 15
-                });
-
-              this.velocityLayer.addTo(this.$Maps);
-            },
-            getData() {
-                var bounds = this.$Maps.getBounds();
-                var polygon = Terraformer.WKT.convert({
-                  "type": "Polygon",
-                  "coordinates": [
-                    [ [bounds._northEast.lng, bounds._northEast.lat],
-                      [bounds._northEast.lng, bounds._southWest.lat],
-                      [bounds._southWest.lng, bounds._southWest.lat],
-                      [bounds._southWest.lng, bounds._northEast.lat],
-                      [bounds._northEast.lng, bounds._northEast.lat] ]
+                  maxVelocity: 30,
+                  colorScale: [
+                    "rgb(255,255,255)"
                   ]
                 });
+              this.velocityLayer.addTo(this.$Maps);
+            },
+            getData(hour) {
+                // var bounds = this.$Maps.getBounds();
+                // var polygon = Terraformer.WKT.convert({
+                //   "type": "Polygon",
+                //   "coordinates": [
+                //     [ [bounds._northEast.lng, bounds._northEast.lat],
+                //       [bounds._northEast.lng, bounds._southWest.lat],
+                //       [bounds._southWest.lng, bounds._southWest.lat],
+                //       [bounds._southWest.lng, bounds._northEast.lat],
+                //       [bounds._northEast.lng, bounds._northEast.lat] ]
+                //   ]
+                // });
+              debugger
                 var that = this
-                this.$http.getData('static/data/gfs.t00z.pgrb2.1p00.f0.json',{time: this.playTime,wkt:polygon}, {}, function (data, msg) {
+                this.$http.getData('static/data/gfs.t00z.pgrb2.1p00.f'+hour+'.json',{time: this.playTime}, {}, function (data, msg) {
                   //this.$http.getData(config.services.baseUrl + config.services.wind.windData, {time: this.playTime,wkt:polygon}, {}, function (data, msg) {
                     that.windData = data;
                 })
             },
-          getNextData() {
-            var bounds = this.$Maps.getBounds();
-            var polygon = Terraformer.WKT.convert({
-              "type": "Polygon",
-              "coordinates": [
-                [ [bounds._northEast.lng, bounds._northEast.lat],
-                  [bounds._northEast.lng, bounds._southWest.lat],
-                  [bounds._southWest.lng, bounds._southWest.lat],
-                  [bounds._southWest.lng, bounds._northEast.lat],
-                  [bounds._northEast.lng, bounds._northEast.lat] ]
-              ]
-            });
-            var that = this
-            this.$http.getData('static/data/gfs.t00z.pgrb2.1p00.f2.json',{time: this.playTime,wkt:polygon}, {}, function (data, msg) {
-              //this.$http.getData(config.services.baseUrl + config.services.wind.windData, {time: this.playTime,wkt:polygon}, {}, function (data, msg) {
-              that.windData = data;
-            })
-          },
+            getNextData() {
+              var bounds = this.$Maps.getBounds();
+              var polygon = Terraformer.WKT.convert({
+                "type": "Polygon",
+                "coordinates": [
+                  [ [bounds._northEast.lng, bounds._northEast.lat],
+                    [bounds._northEast.lng, bounds._southWest.lat],
+                    [bounds._southWest.lng, bounds._southWest.lat],
+                    [bounds._southWest.lng, bounds._northEast.lat],
+                    [bounds._northEast.lng, bounds._northEast.lat] ]
+                ]
+              });
+              var that = this
+              this.$http.getData('static/data/gfs.t00z.pgrb2.1p00.f2.json',{time: this.playTime,wkt:polygon}, {}, function (data, msg) {
+                //this.$http.getData(config.services.baseUrl + config.services.wind.windData, {time: this.playTime,wkt:polygon}, {}, function (data, msg) {
+                that.windData = data;
+              })
+            },
+            getHeatData() {
+              var that = this
+              this.$http.getData(config.services.baseUrl + config.services.wind.windData, {time: this.playTime}, {}, function (data, msg) {
+                that.heatLayer.setData({
+                    max: 27.24,
+                    data: data
+                });
+              })
+            },
             drawPoint() {
               var that = this
               function drawcircle(latlng,dir,speed){
