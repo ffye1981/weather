@@ -9,7 +9,8 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
 		},
 		maxVelocity: 10, // used to align color scale
 		colorScale: null,
-		data: null
+		data: null,
+    onMouseMove: null
 	},
 
 	_map: null,

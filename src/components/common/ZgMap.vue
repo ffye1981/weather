@@ -111,7 +111,7 @@
                   zoomControl: true
                 }).setView(config.mapConfig.view.center,config.mapConfig.view.zoom)
                 this.map.on('zoomend',function (e) {
-                  console.log('zoomend - zoom：'+ e.target.getZoom())
+                  // console.log('zoomend - zoom：'+ e.target.getZoom())
                 })
                 // var layer = L.tileLayer(config.mapConfig.baseLayer.url).addTo(this.map)
                 normalm3.on('load', function (e) {

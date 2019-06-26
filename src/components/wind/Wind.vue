@@ -9,34 +9,13 @@
         name: 'Wind',
         data() {
             return {
-              windData:[
-                {
-                  "lats": 34,
-                  "lons": 108,
-                  "speed": 1
-                },
-                {
-                  "lats": 34,
-                  "lons": 109,
-                  "speed": 2
-                },
-                {
-                  "lats": 34,
-                  "lons": 110,
-                  "speed": 3
-                },
-                {
-                  "lats": 35,
-                  "lons": 108,
-                  "speed": 4
-                }
-              ],
+              windData:[],
               velocityLayer: null,
               heatCfg: {
                 // radius should be small ONLY if scaleRadius is true (or small radius is intended)
                 // if scaleRadius is false it will be the constant radius used in pixels
                 "radius": 2,
-                "maxOpacity": .9,
+                "maxOpacity": .5,
                 // scales the radius based on map zoom
                 "scaleRadius": true,
                 // if set to false the heatmap uses the global maximum for colorization
@@ -56,15 +35,16 @@
                   .50: 'green',
                   .75: 'yellow',
                   1: 'red'
-                },
-                onExtremaChange: function(data) {
-                  // debugger
-                  console.log('onExtremaChange' + data)
-                  // this.updateLegend(data);
                 }
+                // onExtremaChange: function(data) {
+                //   // debugger
+                //   console.log('onExtremaChange' + data)
+                //   // this.updateLegend(data);
+                // }
               },
               heatLayer: null,
-              lyrGroup: L.layerGroup([])
+              lyrGroup: L.layerGroup([]),
+              _shakeTimer: 0,
             }
         },
         props: {},
@@ -92,15 +72,10 @@
           },
           windData: function (newVal, preVal) {
               if(this.velocityLayer) {
-                 this.velocityLayer.setData(newVal)
-                this.heatLayer.setGribData(this.windData);
-                // this.heatLayer.setData({
-                //   max: 4,
-                //   min: 1,
-                //   data: this.windData
-                // });
+                  this.velocityLayer.setData(newVal)
+                  this.heatLayer.setGribData(this.windData);
               }else {
-                this.initLayer()
+                  this.initLayer()
               }
               // this.drawPoint();
           },
@@ -135,23 +110,30 @@
               this.heatLayer = new HeatmapOverlay(this.heatCfg);
               this.heatLayer.addTo(this.$Maps);
               this.heatLayer.setGribData(this.windData);
-              // this.heatLayer.setData({
-              //   max: 4,
-              //   min: 1,
-              //   data: this.windData
-              // });
+              var that = this
               this.velocityLayer = L.velocityLayer({
                   displayValues: true,
                   displayOptions: {
                     velocityType: '全球风场',
                     displayPosition: 'bottomleft',
-                    displayEmptyString: '无数据'
+                    emptyString: '全球风场'
                   },
                   data: this.windData,
                   maxVelocity: 30,
                   colorScale: [
                     "rgb(255,255,255)"
-                  ]
+                  ],
+                  onMouseMove: function(angle,speed,unit,postion) {
+                      console.log('wind=top:'+ postion.y + '°,left:'+ postion.x)
+                      that.shakeTimer = setTimeout(function(){
+                        that.$store.dispatch('ACTION_WEATHER_TIP', {
+                          text: speed + ' ' + unit,
+                          top: postion.y,
+                          left: postion.x
+                        })
+                      }, 200);
+
+                  }
                 });
               this.velocityLayer.addTo(this.$Maps);
             },

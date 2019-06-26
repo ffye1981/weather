@@ -204,7 +204,6 @@
           });
         }
       }
-      debugger
       this.setData({
         max: max,
         min: min,
