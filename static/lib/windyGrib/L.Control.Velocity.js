@@ -66,25 +66,25 @@ L.Control.Velocity = L.Control.extend({
 		return meters * 3.6
 	},
 
-    _onMouseMove: function (e) {
+  _onMouseMove: function (e) {
 
-        var self = this;
-	    var pos = this.options.leafletVelocity._map.containerPointToLatLng(L.point(e.containerPoint.x, e.containerPoint.y));
+    var self = this;
+    var pos = this.options.leafletVelocity._map.containerPointToLatLng(L.point(e.containerPoint.x, e.containerPoint.y));
 
-	    var gridValue = this.options.leafletVelocity._windy.interpolatePoint(pos.lng, pos.lat);
-	    var htmlOut = "";
+    var gridValue = this.options.leafletVelocity._windy.interpolatePoint(pos.lng, pos.lat);
+    var htmlOut = "";
 
-	    if(gridValue && !isNaN(gridValue[0]) && !isNaN(gridValue[1]) && gridValue[2]) {
-		    htmlOut = "<strong>"+ this.options.velocityType +" Direction: </strong>"+
-			    self.vectorToDegrees(gridValue[0],gridValue[1],this.options.angleConvention).toFixed(2) +"°"+
-			    ", <strong>"+ this.options.velocityType +" Speed: </strong>"+
-			    self.vectorToSpeed(gridValue[0],gridValue[1],this.options.speedUnit).toFixed(2) + this.options.speedUnit;
-	    }
-	    else {
-		    htmlOut = this.options.emptyString;
-	    }
-	    self._container.innerHTML = htmlOut;
+    if(gridValue && !isNaN(gridValue[0]) && !isNaN(gridValue[1]) && gridValue[2]) {
+      htmlOut = "<div style='color: white'><strong>"+ this.options.velocityType +" 风向: </strong>"+
+        self.vectorToDegrees(gridValue[0],gridValue[1],this.options.angleConvention).toFixed(2) +"°"+
+        ", <strong>风速: </strong>"+
+        self.vectorToSpeed(gridValue[0],gridValue[1],this.options.speedUnit).toFixed(2) + this.options.speedUnit + "</div>";
     }
+    else {
+      htmlOut = this.options.emptyString;
+    }
+    self._container.innerHTML = htmlOut;
+  }
 
 });
 

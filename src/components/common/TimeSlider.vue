@@ -109,7 +109,7 @@
         mounted() {
             console.log('component mounted')
             this.calValue()
-            this.play()
+            // this.play()
         },
         methods: {
             play() {
@@ -155,6 +155,6 @@
     position: absolute;
     width: calc(100% - 100px);
     left: 50px;
-    bottom: 30px;
+    bottom: 50px;
   }
 </style>

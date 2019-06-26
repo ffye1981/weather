@@ -10,10 +10,10 @@
   if (typeof module !== "undefined" && module.exports) {
     module.exports = factory(
       require('heatmap.js'),
-      require('../leaflet')
+      require('leaflet')
     );
   } else if (typeof define === "function" && define.amd) {
-    define(['heatmap.js', '../leaflet'], factory);
+    define(['heatmap.js', 'leaflet'], factory);
   } else {
     // browser globals
     if (typeof window.h337 === 'undefined') {
@@ -62,7 +62,7 @@
 
       if (!this._heatmap) {
         this._heatmap = h337.create(this.cfg);
-      }
+      } 
 
       // this resets the origin and redraws whenever
       // the zoom changed or the map has been moved
@@ -83,9 +83,9 @@
     },
     _draw: function() {
       if (!this._map) { return; }
-
+      
       var mapPane = this._map.getPanes().mapPane;
-      var point = mapPane._leaflet_pos;
+      var point = mapPane._leaflet_pos;      
 
       // reposition the layer
       this._el.style[HeatmapOverlay.CSS_TRANSFORM] = 'translate(' +
@@ -116,7 +116,7 @@
       var localMin = 0;
       var valueField = this.cfg.valueField;
       var len = this._data.length;
-
+    
       while (len--) {
         var entry = this._data[len];
         var value = entry[valueField];
@@ -160,12 +160,12 @@
       var latField = this.cfg.latField || 'lat';
       var lngField = this.cfg.lngField || 'lng';
       var valueField = this.cfg.valueField || 'value';
-
+    
       // transform data to latlngs
       var data = data.data;
       var len = data.length;
       var d = [];
-
+    
       while (len--) {
         var entry = data[len];
         var latlng = new L.LatLng(entry[latField], entry[lngField]);
@@ -177,7 +177,7 @@
         d.push(dataObj);
       }
       this._data = d;
-
+    
       this._draw();
     },
     setGribData: function(data){
@@ -188,13 +188,15 @@
       var Δφ = header.la2> header.la1? header.dy: -header.dy;    // distance between grid points (e.g., 2.5 deg lon, 2.5 deg lat)
 
       var grid = [];
-      var max = 0,p = 0;
+      var max = 0,min = 10000000000,p = 0;
       var uvArr;
       for (var j = 0; j < header.ny; j++) {
         for (var i = 0; i < header.nx; i++, p++) {
           uvArr = builder.data(p);
           var speed = Math.sqrt(Math.pow(uvArr[0],2) + Math.pow(uvArr[1],2))
-          max = max < speed ? speed : max
+          // max = max < speed ? speed : max
+          max = Math.max(max,speed);
+          min = Math.min(min,speed);
           grid.push({
             "lats": header.la1 + j * Δφ,
             "lons": header.lo1 + i * Δλ,
@@ -202,9 +204,11 @@
           });
         }
       }
+      debugger
       this.setData({
-          max: max,
-          data: grid
+        max: max,
+        min: min,
+        data: grid
       })
     },
     // experimential... not ready.
@@ -221,7 +225,7 @@
         var entry = pointOrArray;
         var latlng = new L.LatLng(entry[latField], entry[lngField]);
         var dataObj = { latlng: latlng };
-
+        
         dataObj[valueField] = entry[valueField];
         this._max = Math.max(this._max, dataObj[valueField]);
         this._min = Math.min(this._min, dataObj[valueField]);
@@ -235,7 +239,7 @@
     },
     _reset: function () {
       this._origin = this._map.layerPointToLatLng(new L.Point(0, 0));
-
+      
       var size = this._map.getSize();
       if (this._width !== size.x || this._height !== size.y) {
         this._width  = size.x;
