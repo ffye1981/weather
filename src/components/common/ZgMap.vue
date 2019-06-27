@@ -93,10 +93,10 @@
                 /**
                  * 高德地图
                  */
-                // var Gaode = L.tileLayer.chinaProvider('GaoDe.Normal.Map', {
-                //   maxZoom: 18,
-                //   minZoom: 5
-                // });
+                var Gaode = L.tileLayer.chinaProvider('GaoDe.Normal.Map', {
+                  maxZoom: 18,
+                  minZoom: 5
+                });
                 // var Gaodimgem = L.tileLayer.chinaProvider('GaoDe.Satellite.Map', {
                 //   maxZoom: 18,
                 //   minZoom: 4
@@ -107,11 +107,18 @@
                 // });
                 // var Gaodimage = L.layerGroup([Gaodimgem, Gaodimga]);
                 this.map = L.map('map',{
-                  layers: [normalm3],
+                  // layers: [normalm3],
+                  layers: [Gaode],
+                  // layers: [normalm6],
+                  // layers: [normalm1],
                   zoomControl: true
                 }).setView(config.mapConfig.view.center,config.mapConfig.view.zoom)
                 // var layer = L.tileLayer(config.mapConfig.baseLayer.url).addTo(this.map)
-                normalm3.on('load', function (e) {
+                // normalm3.on('load', function (e) {
+                Gaode.on('load', function (e) {
+                // normalm6.on('load', function (e) { 
+                // normalm1.on('load', function (e) {
+                                 
                   that.$store.dispatch('ACTION_MAP_STATE', true)
                   Vue.prototype.$Maps = that.map
                 })

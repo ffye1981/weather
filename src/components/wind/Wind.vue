@@ -15,7 +15,7 @@
                 // radius should be small ONLY if scaleRadius is true (or small radius is intended)
                 // if scaleRadius is false it will be the constant radius used in pixels
                 "radius": 2,
-                "maxOpacity": .8,
+                "maxOpacity": 0.6,
                 // scales the radius based on map zoom
                 "scaleRadius": true,
                 // if set to false the heatmap uses the global maximum for colorization
@@ -27,7 +27,14 @@
                 // which field name in your data represents the longitude - default "lng"
                 lngField: 'lons',
                 // which field name in your data represents the data value - default "value"
-                valueField: 'speed'
+                valueField: 'speed',
+                // gradient: {
+                //   // enter n keys between 0 and 1 here
+                //   // for gradient color customization
+                //   '.5': 'blue',
+                //   '.8': 'red',
+                //   '.95': 'white'
+                // }
               },
               heatLayer: null,
               lyrGroup: L.layerGroup([])
@@ -44,12 +51,13 @@
           playTime: function (newVal, preVal) {
               console.log('playTime改变之前的值：' + preVal + '；改变之后的值：' + newVal)
               var hour = new Date(Date.parse(newVal.replace(/-/g, "/"))).getHours();
+              console.log("playTime", this.velocityLayer)
               if(this.velocityLayer) {
                 this.getData(hour)
               }
           },
           loadMapSuccess: function (newVal, preVal) {
-              // console.log('loadMapSuccess改变之前的值：' + preVal + '；改变之后的值：' + newVal)
+              console.log('loadMapSuccess改变之前的值：' + preVal + '；改变之后的值：' + newVal)
               if(newVal) {
                 this.$Maps.addLayer(this.lyrGroup);
                 // this.initLayer()
@@ -57,9 +65,11 @@
               }
           },
           windData: function (newVal, preVal) {
+              console.log('windData改变之前的值：' + preVal + '；改变之后的值：' + newVal);
               if(this.velocityLayer) {
-                 this.velocityLayer.setData(newVal)
-                 this.heatLayer.setGribData(newVal)
+                 this.velocityLayer.setData(newVal);
+                 this.heatLayer.setGribData(newVal);      // setGribData 方法的由来？？？
+                  console.log("test_layer_windData", this.heatLayer, this.heatLayer.setGribData);
               }else {
                 this.initLayer()
               }
@@ -78,19 +88,20 @@
               this.heatLayer = new HeatmapOverlay(this.heatCfg);
               this.heatLayer.addTo(this.$Maps);
               this.heatLayer.setGribData(this.windData);
+              console.log("test_layer", this.heatLayer, this.heatLayer.setGribData)
               this.velocityLayer = L.velocityLayer({
-                  displayValues: true,
-                  displayOptions: {
-                    velocityType: 'Global Wind',
-                    displayPosition: 'bottomleft',
-                    displayEmptyString: 'No wind data'
-                  },
-                  data: this.windData,
-                  maxVelocity: 30,
-                  colorScale: [
-                    "rgb(255,255,255)"
-                  ]
-                });
+                displayValues: true,
+                displayOptions: {
+                  velocityType: 'Global Wind',
+                  displayPosition: 'bottomleft',
+                  displayEmptyString: 'No wind data'
+                },
+                data: this.windData,
+                maxVelocity: 30,
+                colorScale: [
+                  "rgb(255,255,255)"
+                ]
+              });
               this.velocityLayer.addTo(this.$Maps);
             },
             getData(hour) {
@@ -105,13 +116,14 @@
                 //       [bounds._northEast.lng, bounds._northEast.lat] ]
                 //   ]
                 // });
-              debugger
-                var that = this
+              // debugger
+                var that = this;
                 this.$http.getData('static/data/gfs.t00z.pgrb2.1p00.f'+hour+'.json',{time: this.playTime}, {}, function (data, msg) {
                   //this.$http.getData(config.services.baseUrl + config.services.wind.windData, {time: this.playTime,wkt:polygon}, {}, function (data, msg) {
                     that.windData = data;
                 })
             },
+            // 此方法的显示参数为第二个Json的含义；
             getNextData() {
               var bounds = this.$Maps.getBounds();
               var polygon = Terraformer.WKT.convert({

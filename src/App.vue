@@ -9,7 +9,9 @@
 <script>
   import zgMap from './components/common/ZgMap'
   import timeSlider from './components/common/TimeSlider'
-  import wind from './components/wind/Wind'
+  import wind from './components/wind/Wind';
+    // import wind from './components/wind/Wind_copy'      // test first
+
 
   export default {
       name: 'App',
@@ -29,5 +31,8 @@
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.leaflet-top{
+  display: none
 }
 </style>

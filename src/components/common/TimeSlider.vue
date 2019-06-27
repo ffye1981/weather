@@ -1,4 +1,7 @@
 <template>
+<div class="timerControl">
+  <el-button type="primary" icon="el-icon-video-pause"></el-button>
+  <el-button type="primary" icon="el-icon-d-arrow-left"></el-button>
   <el-slider
     :min="0"
     :max="22"
@@ -10,6 +13,9 @@
     @change="change"
   >
   </el-slider>
+  <el-button type="primary" icon="el-icon-d-arrow-right"></el-button>
+  <el-button type="primary" icon="el-icon-video-play"></el-button>
+</div>
 </template>
 
 <script>
@@ -152,9 +158,18 @@
 
 <style scoped>
   .el-slider {
+    width: calc(100% - 200px);
+    /* position: absolute;
+    left: 50px;
+    bottom: 30px; */
+  }
+  .timerControl{
+    display: flex;
+    flex-direction: row;
     position: absolute;
     width: calc(100% - 100px);
     left: 50px;
     bottom: 30px;
+
   }
 </style>
