@@ -115,7 +115,7 @@
         mounted() {
             console.log('component mounted')
             this.calValue()
-            this.play()
+            // this.play()
         },
         methods: {
             play() {
