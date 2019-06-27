@@ -108,7 +108,7 @@
                 // var Gaodimage = L.layerGroup([Gaodimgem, Gaodimga]);
                 this.map = L.map('map',{
                   layers: [normalm3],
-                  zoomControl: true
+                  zoomControl: false
                 }).setView(config.mapConfig.view.center,config.mapConfig.view.zoom)
                 this.map.on('zoomend',function (e) {
                   // console.log('zoomend - zoom：'+ e.target.getZoom())
