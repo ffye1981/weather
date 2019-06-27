@@ -30,7 +30,7 @@
               }
           },
           avoidLeft: function () {
-            console.log('left:' + this.left+ ',fullHeight:'+ this.params_in.fullHeight + ',fullWidth:' + this.params_in.fullWidth)
+            // console.log('left:' + this.left+ ',fullHeight:'+ this.params_in.fullHeight + ',fullWidth:' + this.params_in.fullWidth)
             if(this.left < 35) {
               return this.left
             }else if (this.left > (this.params_in.fullWidth - 35)){   // 处理右边超出问题
