@@ -66,6 +66,7 @@
    position: absolute;
    color: black;
    opacity:0.8;
-   border-radius:15px
+   border-radius:15px;
+   font-size: smaller;
  }
 </style>

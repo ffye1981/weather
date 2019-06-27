@@ -5,9 +5,9 @@
     <h4>Legend Title</h4>
     <span ref="min"></span>
     <span ref="max"></span>
-    <img ref="gradient" src="" style="width:100%" />
+    <img ref="gradient" src=""/>
   </div>
-   <canvas ref="legendCanvas" width="100" height="10" style="display: none;"></canvas>
+   <canvas ref="legendCanvas" width="10" height="100" style="display: none"></canvas>
   </div>
 </template>
 
@@ -195,18 +195,19 @@
               }
             },
             updateLegend: function (data) {
+              debugger
               // the onExtremaChange callback gives us min, max, and the gradientConfig
               // so we can update the legend
               this.$refs.min.innerHTML = data.min
               this.$refs.max.innerHTML = data.max
               var legendCtx = this.$refs.legendCanvas.getContext('2d')
               var gradientCfg = data.gradient
-              var gradient = legendCtx.createLinearGradient(0, 0, 100, 10)
+              var gradient = legendCtx.createLinearGradient(0, 100, 0, 0)
               for (var key in gradientCfg) {
                 gradient.addColorStop(key, gradientCfg[key])
               }
               legendCtx.fillStyle = gradient
-              legendCtx.fillRect(0, 0, 100, 10)
+              legendCtx.fillRect(0, 0, 10, 100)
               this.$refs.gradient.src = this.$refs.legendCanvas.toDataURL()
             }
         },
