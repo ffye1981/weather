@@ -21,7 +21,7 @@
                 // if set to false the heatmap uses the global maximum for colorization
                 // if activated: uses the data maximum within the current map boundaries
                 //   (there will always be a red spot with useLocalExtremas true)
-                "useLocalExtrema": false,
+                "useLocalExtrema": true,
                 // which field name in your data represents the latitude - default "lat"
                 latField: 'lats',
                 // which field name in your data represents the longitude - default "lng"
@@ -31,10 +31,8 @@
                 gradient: {
                   // enter n keys between 0 and 1 here
                   // for gradient color customization
-                  .25: '#00192E',
-                  .50: 'green',
-                  .75: 'yellow',
-                  1: 'red'
+                  0.25: "rgba(0,0,255,0.25)",
+                  1.0: "rgba(255,0,0,1)"
                 }
                 // onExtremaChange: function(data) {
                 //   // debugger
