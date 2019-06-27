@@ -1,5 +1,14 @@
 <template>
   <!--<el-button @click="getNextData">默认按钮</el-button>-->
+  <div>
+  <div class="legend-area">
+    <h4>Legend Title</h4>
+    <span ref="min"></span>
+    <span ref="max"></span>
+    <img ref="gradient" src="" style="width:100%" />
+  </div>
+   <canvas ref="legendCanvas" width="100" height="10" style="display: none;"></canvas>
+  </div>
 </template>
 
 <script>
@@ -21,7 +30,7 @@
                 // if set to false the heatmap uses the global maximum for colorization
                 // if activated: uses the data maximum within the current map boundaries
                 //   (there will always be a red spot with useLocalExtremas true)
-                "useLocalExtrema": true,
+                "useLocalExtrema": false,
                 // which field name in your data represents the latitude - default "lat"
                 latField: 'lats',
                 // which field name in your data represents the longitude - default "lng"
@@ -31,18 +40,19 @@
                 gradient: {
                   // enter n keys between 0 and 1 here
                   // for gradient color customization
-                  0.25: "rgba(0,0,255,0.25)",
-                  1.0: "rgba(255,0,0,1)"
-                }
-                // onExtremaChange: function(data) {
-                //   // debugger
-                //   console.log('onExtremaChange' + data)
-                //   // this.updateLegend(data);
-                // }
+                  .25: '#00192E',
+                  .50: 'green',
+                  .75: 'yellow',
+                  1: 'red'
+                },
+                onExtremaChange: function(data) {
+                  // console.log('onExtremaChange' + data)
+                  this.updateLegend(data);
+                }.bind(this)
               },
               heatLayer: null,
               lyrGroup: L.layerGroup([]),
-              _shakeTimer: 0,
+              _shakeTimer: 0
             }
         },
         props: {},
@@ -76,24 +86,6 @@
                   this.initLayer()
               }
               // this.drawPoint();
-          },
-          updateLegend: function (data) {
-            // the onExtremaChange callback gives us min, max, and the gradientConfig
-            // so we can update the legend
-            debugger
-            min.innerHTML = data.min;
-            max.innerHTML = data.max;
-            // regenerate gradient image
-            if (data.gradient != gradientCfg) {
-              gradientCfg = data.gradient;
-              var gradient = legendCtx.createLinearGradient(0, 0, 100, 1);
-              for (var key in gradientCfg) {
-                gradient.addColorStop(key, gradientCfg[key]);
-              }
-              legendCtx.fillStyle = gradient;
-              legendCtx.fillRect(0, 0, 100, 10);
-              gradientImg.src = legendCanvas.toDataURL();
-            }
           }
         },
         created() {
@@ -102,6 +94,7 @@
         mounted() {
             // console.log('component mounted')
             // this.getData()
+
         },
         methods: {
             initLayer() {
@@ -123,6 +116,7 @@
                   ],
                   onMouseMove: function(angle,speed,unit,postion) {
                       // console.log('wind=top:'+ postion.y + '°,left:'+ postion.x)
+                      //更新鼠标提示窗口
                       that.shakeTimer = setTimeout(function(){
                         that.$store.dispatch('ACTION_WEATHER_TIP', {
                           text: speed + ' ' + unit,
@@ -199,6 +193,21 @@
               for(var i=0;i<this.windData.length;i++){
                 drawcircle([this.windData[i].lats,this.windData[i].lons],this.windData[i].speed);
               }
+            },
+            updateLegend: function (data) {
+              // the onExtremaChange callback gives us min, max, and the gradientConfig
+              // so we can update the legend
+              this.$refs.min.innerHTML = data.min
+              this.$refs.max.innerHTML = data.max
+              var legendCtx = this.$refs.legendCanvas.getContext('2d')
+              var gradientCfg = data.gradient
+              var gradient = legendCtx.createLinearGradient(0, 0, 100, 10)
+              for (var key in gradientCfg) {
+                gradient.addColorStop(key, gradientCfg[key])
+              }
+              legendCtx.fillStyle = gradient
+              legendCtx.fillRect(0, 0, 100, 10)
+              this.$refs.gradient.src = this.$refs.legendCanvas.toDataURL()
             }
         },
         destroyed: function () {
@@ -209,4 +218,13 @@
 </script>
 
 <style scoped>
+  .legend-area {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 10px;
+    background: white;
+    outline: 3px solid black;
+    line-height: 1em;
+  }
 </style>
