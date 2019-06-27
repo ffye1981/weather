@@ -42,13 +42,13 @@
                 //   minZoom: 5
                 // });
                 var normalm3 = L.tileLayer.chinaProvider('Geoq.Normal.PurplishBlue', {
-                  maxZoom: 18,
+                  maxZoom: 16,
                   minZoom: 3
                 });
-                // var normalm4 = L.tileLayer.chinaProvider('Geoq.Normal.Gray', {
-                //   maxZoom: 18,
-                //   minZoom: 5
-                // });
+                var normalm4 = L.tileLayer.chinaProvider('Geoq.Normal.Gray', {
+                  maxZoom: 18,
+                  minZoom: 5
+                });
                 // var normalm5 = L.tileLayer.chinaProvider('Geoq.Normal.Warm', {
                 //   maxZoom: 18,
                 //   minZoom: 5
@@ -113,6 +113,9 @@
                   // layers: [normalm1],
                   zoomControl: true
                 }).setView(config.mapConfig.view.center,config.mapConfig.view.zoom)
+                this.map.on('zoomend',function (e) {
+                  // console.log('zoomend - zoom：'+ e.target.getZoom())
+                })
                 // var layer = L.tileLayer(config.mapConfig.baseLayer.url).addTo(this.map)
                 // normalm3.on('load', function (e) {
                 Gaode.on('load', function (e) {

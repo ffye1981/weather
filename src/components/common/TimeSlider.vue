@@ -169,7 +169,6 @@
     position: absolute;
     width: calc(100% - 100px);
     left: 50px;
-    bottom: 30px;
-
+    bottom: 50px;
   }
 </style>
