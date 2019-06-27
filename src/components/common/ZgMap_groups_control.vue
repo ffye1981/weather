@@ -40,23 +40,32 @@
                 //     radius: 10000
                 // // }).addTo(this.map);
                
+                // this.map = L.map('map', {
+                //     center: config.mapConfig.view.center,
+                //     zoom: 10,
+                //     // layers: [grayscale, cities]
+                // });
+
                 let littletom = L.marker([39.61, 115.02]).bindPopup("This is Littleton, CO.");
                 let denver = L.marker([39.74, 114.99]).bindPopup("This is Denver, CO.");
                 let aurora = L.marker([39.73, 114.8]).bindPopup("This is Aurora, CO.");
                 let golden = L.marker([39.77, 115.23]).bindPopup("This is Golden, CO.");
-                let cities = L.layerGroup([littletom, denver, aurora, golden]).addTo(this.map);
 
-                var grayscale = L.tileLayer(config.mapConfig.baseLayer.url, {id: 'MapID'}).addTo(this.map);
-                var streets   = L.tileLayer(config.mapConfig.baseLayer.url, {id: 'MapID'}).addTo(this.map);
+                let cities = L.layerGroup([littletom, denver, aurora, golden]);
+                var grayscale = L.tileLayer(config.mapConfig.baseLayer.url, {id: 'MapID'});
+                var streets   = L.tileLayer(config.mapConfig.baseLayer.url, {id: 'MapID'});
 
-                var map = L.map('map', {
-                    center: [39.73, -104.99],
+                this.map = L.map('map', {
+                    center: config.mapConfig.view.center,
                     zoom: 10,
-                    layers: [grayscale, cities]
-                });
-
+                    layers: [grayscale, cities]       // 作用：初始化时有底图显示
+                });              
+                // var baseMaps = {
+                //     "Grayscale": grayscale,
+                //     "Streets": streets
+                // };
                 var baseMaps = {
-                    "Grayscale": grayscale,
+                    "<span style='color: gray'>Grayscale</span>": grayscale,
                     "Streets": streets
                 };
 
@@ -64,11 +73,6 @@
                     "Cities": cities
                 };
                 L.control.layers(baseMaps, overlayMaps).addTo(this.map);
-                var baseMaps = {
-                    "<span style='color: gray'>Grayscale</span>": grayscale,
-                    "Streets": streets
-                };
-
             }
         },
         destroyed: function () {

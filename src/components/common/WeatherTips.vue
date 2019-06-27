@@ -23,17 +23,17 @@
           }),
           avoidTop: function () {
             // console.log('top:' + this.top+ ',fullHeight:'+ this.params_in.fullHeight + ',fullWidth:' + this.params_in.fullWidth)
-             if(this.top < 40) {
-               return this.top + 15
-             }else {
-               return this.top - 40
-             }
+              if(this.top < 40) {
+                return this.top + 15
+              }else {
+                return this.top - 40
+              }
           },
           avoidLeft: function () {
             // console.log('left:' + this.left+ ',fullHeight:'+ this.params_in.fullHeight + ',fullWidth:' + this.params_in.fullWidth)
             if(this.left < 35) {
               return this.left
-            }else if (this.left > (this.params_in.fullWidth - 35)){
+            }else if (this.left > (this.params_in.fullWidth - 35)){   // 处理右边超出问题
               return this.left - 70
             } else {
               return this.left - 35

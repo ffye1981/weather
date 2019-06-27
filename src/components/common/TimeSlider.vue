@@ -1,4 +1,8 @@
 <template>
+<div class="timerControl">
+  <!-- <el-button type="text" icon="el-icon-video-pause"  @click="getNextData" ></el-button> -->
+  <el-button :icon= "autoPlay === true ? 'el-icon-video-play' : 'el-icon-video-pause'" circle @click="changeAutoPlay"></el-button>
+  <el-button icon="el-icon-d-arrow-left" circle @click="calValue('reduce')"></el-button>
   <el-slider
     :min="0"
     :max="22"
@@ -10,6 +14,9 @@
     @change="change"
   >
   </el-slider>
+  <el-button  icon="el-icon-d-arrow-right" circle @click="calValue('add')"></el-button>
+  <!-- <el-button  icon="el-icon-video-pause" circle @click="stop"></el-button> -->
+</div>
 </template>
 
 <script>
@@ -17,6 +24,7 @@
         name: 'TimeSlider',
         data() {
             return {
+                autoPlay: false,
                 value: 0,
                 index: 0,
                 marks: {
@@ -112,23 +120,45 @@
             // this.play()
         },
         methods: {
+            changeAutoPlay(){
+              if(this.autoPlay === true){
+                this.stop()
+                this.autoPlay = false
+              }else if(this.autoPlay === false){
+                this.play()
+                this.autoPlay = true
+              }
+            },
             play() {
                 var that = this
+                // that.calValue();
                 this.timer = setInterval(() => {
-                  that.calValue()
+                  that.calValue('add')
                 }, 20000)
+
             },
             stop() {
               clearInterval(this.timer)
             },
-            calValue() {
+            calValue(methodName) {
               let keys = Object.keys(this.marks)
-              this.value = parseInt(Object.keys(this.marks)[this.index])
-              this.change(this.value);
-              this.index = this.index + 1
+              if(methodName === "reduce"){
+                console.log("reduce",methodName,this.value,this.index )
+                if(this.index === 0) {
+                   this.index = this.index;
+                }else{
+                  this.index = this.index - 1
+                }
+              }else if(methodName === "add"){
+                this.index = this.index + 1 
+              }else{
+                this.index = this.index
+              }
               if(this.index == keys.length) {
                 this.index = 0
               }
+              this.value = parseInt(Object.keys(this.marks)[this.index])
+              this.change(this.value);
             },
             change(val) {
               var date = new Date();
@@ -152,9 +182,23 @@
 
 <style scoped>
   .el-slider {
-    position: absolute;
-    width: calc(100% - 100px);
+    width: calc(100% - 130px);
+    margin:  0 20px;
+    /* position: absolute;
     left: 50px;
+    bottom: 30px; */
+  }
+  .timerControl{
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    width: calc(100% - 70px);
+    left: 35px;
     bottom: 50px;
+  }
+
+  .el-button {
+    padding: 1px 6px;
+    font-size: 22px;
   }
 </style>
