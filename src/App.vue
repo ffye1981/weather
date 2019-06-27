@@ -3,7 +3,7 @@
     <zg-map></zg-map>
     <time-slider></time-slider>
     <wind></wind>
-    <weather-tips></weather-tips>
+    <weather-tips :params_in="params"></weather-tips>
   </div>
 </template>
 
@@ -15,6 +15,25 @@
 
   export default {
       name: 'App',
+      data () {
+        return {
+          params: {
+            fullHeight: document.documentElement.clientHeight,
+            fullWidth: document.documentElement.clientWidth
+          }
+        }
+      },
+      mounted () {
+        const that = this
+        window.onresize = () => {
+          return (() => {
+            window.fullHeight = document.documentElement.clientHeight
+            window.fullWidth = document.documentElement.clientHeight
+            that.params.fullHeight = window.fullHeight
+            that.params.fullWidth = window.fullWidth
+          })()
+        }
+      },
       components: {
         zgMap,
         timeSlider,

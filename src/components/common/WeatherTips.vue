@@ -1,6 +1,5 @@
-<script src="../../store/mutation-types.js"></script>
 <template>
-  <el-tag type="info" size="small" :style="'top:'+ top +'px;left: '+ left+'px'">{{text}}</el-tag>
+  <el-tag type="info" size="small" :style="'top:'+ avoidTop +'px;left: '+ avoidLeft+'px'">{{text}}</el-tag>
 </template>
 
 <script>
@@ -8,19 +7,38 @@
     export default {
         name: 'WeatherTips',
         data() {
-            return {
-                // text: '13.5 m/s',
-                // top: 0,
-                // left: 0
-            }
+            return {}
         },
-        props: {},
+        props: {
+          params_in: {
+            fullHeight: 0,
+            fullWidth: 0,
+          }
+        },
         computed: {
           ...mapState({
             text: state => state.weatherTips.text,
-            top: state => state.weatherTips.top - 40,
-            left: state => state.weatherTips.left -30
+            top: state => state.weatherTips.top,
+            left: state => state.weatherTips.left
           }),
+          avoidTop: function () {
+            // console.log('top:' + this.top+ ',fullHeight:'+ this.params_in.fullHeight + ',fullWidth:' + this.params_in.fullWidth)
+             if(this.top < 40) {
+               return this.top + 15
+             }else {
+               return this.top - 40
+             }
+          },
+          avoidLeft: function () {
+            // console.log('left:' + this.left+ ',fullHeight:'+ this.params_in.fullHeight + ',fullWidth:' + this.params_in.fullWidth)
+            if(this.left < 35) {
+              return this.left
+            }else if (this.left > (this.params_in.fullWidth - 35)){
+              return this.left - 70
+            } else {
+              return this.left - 35
+            }
+          }
         },
         watch: {
             field: function (newVal, preVal) {
@@ -35,7 +53,7 @@
         },
         methods: {
             getList() {
-            }
+            },
         },
         destroyed: function () {
         },
@@ -47,5 +65,7 @@
  .el-tag {
    position: absolute;
    color: black;
+   opacity:0.8;
+   border-radius:15px
  }
 </style>

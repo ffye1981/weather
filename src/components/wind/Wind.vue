@@ -56,7 +56,7 @@
         },
         watch: {
           playTime: function (newVal, preVal) {
-              console.log('playTime改变之前的值：' + preVal + '；改变之后的值：' + newVal)
+              // console.log('playTime改变之前的值：' + preVal + '；改变之后的值：' + newVal)
               var hour = new Date(Date.parse(newVal.replace(/-/g, "/"))).getHours();
               if(this.velocityLayer) {
                 this.getData(hour)
@@ -124,7 +124,7 @@
                     "rgb(255,255,255)"
                   ],
                   onMouseMove: function(angle,speed,unit,postion) {
-                      console.log('wind=top:'+ postion.y + '°,left:'+ postion.x)
+                      // console.log('wind=top:'+ postion.y + '°,left:'+ postion.x)
                       that.shakeTimer = setTimeout(function(){
                         that.$store.dispatch('ACTION_WEATHER_TIP', {
                           text: speed + ' ' + unit,
@@ -211,7 +211,4 @@
 </script>
 
 <style scoped>
- #tip {
-   color: white;
- }
 </style>
