@@ -3,25 +3,33 @@
         <p class="unitCss">{{unit}}</p>
         <div class="boxContent">
             <p class="maxContent">{{max}}</p>
-            <img src="" alt="" class="imgSrc">
+            <img :src="src" alt="" class="imgSrc">
             <p class="minContent">{{min}}</p>
         </div>
     </div>
 </template>
 
 <script>
+    import {mapState} from 'vuex'
     export default {
         name: 'WeatherLegend',
         data() {
             return {
-                src: null,
-                max: 0,
-                min: 0,
-                unit: 'm/s'
+                // src: null,
+                // max: 0,
+                // min: 0,
+                // unit: 'm/s'
             }
         },
         props: {},
-        computed: {},
+        computed: {
+          ...mapState({
+            src: state => state.weatherLegend.src,
+            max: state => state.weatherLegend.max,
+            min: state => state.weatherLegend.min,
+            unit: state => state.weatherLegend.unit
+          }),
+        },
         watch: {
             field: function (newVal, preVal) {
                 console.log('改变之前的值：' + preVal + '；改变之后的值：' + newVal)
@@ -52,7 +60,7 @@
         display: flex;
         flex-direction: column;
         width: 30px;
-        height: 150px;
+        height: 180px;
         position: absolute;
         right: 35px;
         bottom: 100px;
@@ -63,12 +71,13 @@
     .imgSrc {
         display: block;
         width: 30px;
-        height: 130px;
+        height: 160px;
         background: #ccc;
-        /* -moz-transform:rotate(270deg); 
+        /* -moz-transform:rotate(270deg);
         -webkit-transform:rotate(270deg);
         transform:rotate(270deg);
         filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=3); */
+        border-radius: 0px 0px 5px 5px;
     }
     
     .unitCss {
@@ -76,6 +85,7 @@
         line-height: 20px;
         text-align: center;
         background: #fff;
+        border-radius: 5px 5px 0px 0px;
     }
 
     .boxContent {
@@ -104,7 +114,8 @@
         height: 20px;
         line-height: 20px;
         text-align: center;
-        color: #fff
+        color: #fff;
+        border-radius: 0px 0px 5px 5px;
     }
 
 </style>

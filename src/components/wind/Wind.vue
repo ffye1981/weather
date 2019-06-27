@@ -1,14 +1,6 @@
 <template>
   <!--<el-button @click="getNextData">默认按钮</el-button>-->
-  <div>
-  <div class="legend-area">
-    <h4>Legend Title</h4>
-    <span ref="min"></span>
-    <span ref="max"></span>
-    <img ref="gradient" src=""/>
-  </div>
-   <canvas ref="legendCanvas" width="10" height="100" style="display: none"></canvas>
-  </div>
+   <canvas ref="legendCanvas" width="30" height="130" style="display: none"></canvas>
 </template>
 
 <script>
@@ -30,7 +22,7 @@
                 // if set to false the heatmap uses the global maximum for colorization
                 // if activated: uses the data maximum within the current map boundaries
                 //   (there will always be a red spot with useLocalExtremas true)
-                "useLocalExtrema": false,
+                "useLocalExtrema": true,
                 // which field name in your data represents the latitude - default "lat"
                 latField: 'lats',
                 // which field name in your data represents the longitude - default "lng"
@@ -195,20 +187,25 @@
               }
             },
             updateLegend: function (data) {
-              debugger
               // the onExtremaChange callback gives us min, max, and the gradientConfig
               // so we can update the legend
-              this.$refs.min.innerHTML = data.min
-              this.$refs.max.innerHTML = data.max
+              // this.$refs.min.innerHTML = data.min
+              // this.$refs.max.innerHTML = data.max
               var legendCtx = this.$refs.legendCanvas.getContext('2d')
               var gradientCfg = data.gradient
-              var gradient = legendCtx.createLinearGradient(0, 100, 0, 0)
+              var gradient = legendCtx.createLinearGradient(0, 130, 0, 0)
               for (var key in gradientCfg) {
                 gradient.addColorStop(key, gradientCfg[key])
               }
               legendCtx.fillStyle = gradient
-              legendCtx.fillRect(0, 0, 10, 100)
-              this.$refs.gradient.src = this.$refs.legendCanvas.toDataURL()
+              legendCtx.fillRect(0, 0, 30, 130)
+              // this.$refs.gradient.src = this.$refs.legendCanvas.toDataURL()
+              this.$store.dispatch('ACTION_WEATHER_LEGEND', {
+                src: this.$refs.legendCanvas.toDataURL(),
+                max: data.max.toFixed(1),       //最大值
+                min: data.min.toFixed(1),       //最小值
+                unit: 'm/s'      //单位
+              })
             }
         },
         destroyed: function () {
