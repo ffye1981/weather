@@ -134,7 +134,7 @@
                 // that.calValue();
                 this.timer = setInterval(() => {
                   that.calValue('add')
-                }, 2000)
+                }, 20000)
 
             },
             stop() {
