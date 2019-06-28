@@ -1,7 +1,7 @@
 <template>
 <div class="timerControl">
   <!-- <el-button type="text" icon="el-icon-video-pause"  @click="getNextData" ></el-button> -->
-  <el-button :icon= "autoPlay === true ? 'el-icon-video-play' : 'el-icon-video-pause'" circle @click="changeAutoPlay"></el-button>
+  <el-button :icon= "autoPlay === true ? 'el-icon-video-pause' : 'el-icon-video-play'" circle @click="changeAutoPlay"></el-button>
   <el-button icon="el-icon-d-arrow-left" circle @click="calValue('reduce')"></el-button>
   <el-slider
     :min="0"
@@ -24,7 +24,7 @@
         name: 'TimeSlider',
         data() {
             return {
-                autoPlay: false,
+                autoPlay: true,
                 value: 0,
                 index: 0,
                 marks: {
@@ -117,7 +117,7 @@
         mounted() {
             console.log('component mounted')
             this.calValue()
-            // this.play()
+            this.changeAutoPlay()
         },
         methods: {
             changeAutoPlay(){
@@ -134,7 +134,7 @@
                 // that.calValue();
                 this.timer = setInterval(() => {
                   that.calValue('add')
-                }, 20000)
+                }, 2000)
 
             },
             stop() {
