@@ -2,19 +2,21 @@
   <div id="app">
     <zg-map></zg-map>
     <time-slider></time-slider>
-    <wind></wind>
+    <wind v-if="weatherType == 0"></wind>
     <weather-tips :params_in="params"></weather-tips>
     <weather-legend ></weather-legend>
+    <weather-swticher></weather-swticher>
   </div>
 </template>
 
 <script>
+  import {mapState} from 'vuex'
   import zgMap from './components/common/ZgMap'
   import timeSlider from './components/common/TimeSlider'
   import wind from './components/wind/Wind'
   import weatherTips from './components/common/WeatherTips';
   import weatherLegend from './components/common/WeatherLegend';
-
+  import weatherSwticher from './components/common/WeatherSwitcher';
 
   export default {
       name: 'App',
@@ -25,6 +27,11 @@
             fullWidth: document.documentElement.clientWidth
           }
         }
+      },
+      computed: {
+        ...mapState({
+          weatherType: state => state.weatherSwitcher.weatherType
+        }),
       },
       mounted () {
         const that = this
@@ -42,7 +49,8 @@
         timeSlider,
         wind,
         weatherTips,
-        weatherLegend
+        weatherLegend,
+        weatherSwticher
       }
   }
 </script>
