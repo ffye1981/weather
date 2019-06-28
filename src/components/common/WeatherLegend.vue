@@ -90,7 +90,6 @@
 
     .boxContent {
         position: relative;
-        height: 130px;
     }
     .maxContent {
         padding: 0;
