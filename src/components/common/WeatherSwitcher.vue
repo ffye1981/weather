@@ -1,6 +1,6 @@
 <template>
     <div class="weatherSwitcher">
-        <div v-for="(fieldCell,index) in fieldContent" @click="currentIndex = index" >   
+        <div v-for="(fieldCell,index) in fieldContent" @click="changeType(index)" >   
         <!-- <div v-for="(fieldCell,index) in fieldContent" @click="currentIndex = index" >    -->
             <div :class="currentIndex === index ? 'active': 'fieldTitle'">
                 <img class="imgIcon" :src="currentIndex === index ? require(`../../../static/images/weatherType/${fieldCell.type}_select.png`) :  require(`../../../static/images/weatherType/${fieldCell.type}_unselect.png`)" alt="">
@@ -8,13 +8,13 @@
                 <p class="titleContent">{{fieldCell.name}}</p>
             </div>
             <div class="fieldCellContent" v-if="currentIndex === index">
-                {{fieldCell.paramsName}}:
-                <el-select class="selcetContent" size="small" @change="sendParams" v-model="value" :placeholder="`${fieldCell.params[0].param1}${fieldCell.params[0].param2 ? `,${fieldCell.params[0].param2}` : ''}`">
+                {{fieldCell.paramsLabel ? `${fieldCell.paramsLabel.label}:` : ""}}
+                <el-select class="selcetContent" size="small" @change="sendParams" v-model="value" :placeholder="`${Object.values(fieldCell.paramsOptions[0]) ? `${Object.values(fieldCell.paramsOptions[0]).toString()}` : ''}`">
                     <el-option
-                        v-for="(item,itemIndex) in fieldCell.params"
+                        v-for="(item,itemIndex) in fieldCell.paramsOptions"
                         :key="itemIndex"
-                        :label="`${item.param1}${item.param2 ? `,${item.param2}` : ''}`"
-                        :value="`${item.param1}${item.param2 ? `,${item.param2}` : ''}`">
+                        :label="`${Object.values(item) ? `${Object.values(item).toString()}` : ''}`"
+                        :value="`${Object.values(item) ? `${Object.values(item).toString()}` : ''}`">
                     </el-option>
                 </el-select>
             </div>
@@ -37,32 +37,23 @@
                         name: "风量",
                         iconPng: "wind_unselect.png",
                         iconPngSelect: "wind_select.png",
-                        paramsName: "高度",
-                        params: [
+                        paramsLabel: {
+                            label:"高度",
+                            value: "height"
+                        },
+                        paramsOptions: [              
                             {
-                                param1: 0,
-                                param2: "200m"
+                                atmosphere: 0,
+                                height: "200m"
                             },
                             {
-                                param1: "1000kpa",
-                                param2: "1000m"
+                                atmosphere11: "1000kpa",
+                                height: "1000m"
                             },
                             {
-                                param1: "2000kpa",
-                                param2: "2000m"
+                                atmosphere: "2000kpa",
+                                height: "2000m"
                             },
-                            // {
-                            //     atmosphere: 0,
-                            //     height: "200m"
-                            // },
-                            // {
-                            //     atmosphere: "1000kpa",
-                            //     height: "1000m"
-                            // },
-                            // {
-                            //     atmosphere: "2000kpa",
-                            //     height: "2000m"
-                            // },
                         ]
                     },
                     1: {
@@ -70,18 +61,22 @@
                         name: "温度",
                         iconPng: "temperature_unselect.png",
                         iconPngSelect: "temperature_select.png",
-                        paramsName: "温度",
-                        params: [
+                        paramsLabel: "温度",
+                        paramsLabel: {
+                            label:"温度",
+                            value: "height"
+                        },
+                        paramsOptions: [
                             {
-                                param1: 0,
+                                atmosphere: 0
                             },
                             {
-                                param1: "1000kpa",
-                                param2: "1000m"
+                                atmosphere: "1000kpa",
+                                height: "1000m"
                             },
                             {
-                                param1: "2000kpa",
-                                param2: "2000m"
+                                atmosphere: "2000kpa",
+                                height: "2000m"
                             },
                         ]
                     },
@@ -103,18 +98,22 @@
             console.log('component mounted')
         },
         methods: {
+            changeType(index){
+                if(this.currentIndex !== index){
+                    this.currentIndex = index;
+                    this.$store.dispatch('ACTION_WEATHER_TYPE', {
+                        weatherType: this.currentIndex,
+                    })
+                }
+            },
             sendParams(){
-                let paramsArray = this.value.split(",");
-                let paramsObj = {};
-                paramsArray.map((item,index) => {
-                    var paramsKey = `param${index + 1}`
-                     paramsObj[paramsKey] = item;
+                let arrayOptions = this.fieldContent[this.currentIndex].paramsOptions;
+                let selectOption = arrayOptions.find((item,index) => {
+                   return Object.values(item).toString() == this.value
                 });
-                console.log("sendParams", this.value, paramsObj);
-
-                this.$store.dispatch('ACTION_WEATHER_TYPE', {
-                    weatherType: this.currentIndex,
-                    dataParams: this.value, 
+                console.log("sendParams", arrayOptions, this.value, selectOption);
+                this.$store.dispatch('ACTION_WEATHER_OPTION', {
+                    weatherParams: selectOption, 
                 })
             }
         },
@@ -185,10 +184,15 @@
 }
 .el-select>>>.el-input__inner {
     color: #ffffff;
-    background: #409eff;
     padding: 0 10px;
     height: 30px;
     border-color: #409eff;
+    /* background: #409eff; 
+    border-color: #409eff;
+    */
+    background: #00192e;
+    border-color: #00192e;
+
 }
 .el-input--suffix>>>.el-input__inner {
     padding-right: 25px;
