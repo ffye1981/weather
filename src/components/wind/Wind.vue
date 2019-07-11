@@ -208,8 +208,24 @@
               })
             }
         },
+        // beforeUpdate: function(){
+        //   if(this.velocityLayer) {
+        //       this.velocityLayer.setData(newVal)
+        //       this.heatLayer.setGribData(this.windData);
+        //   }else {
+        //       this.initLayer()
+        //   }
+        // },
+        // updated: function(){
+        //   if(this.velocityLayer) {
+        //       this.velocityLayer.setData(newVal)
+        //       this.heatLayer.setGribData(this.windData);
+        //   }else {
+        //       this.initLayer()
+        //   }
+        // },
         destroyed: function () {
-          this.velocityLayer._destroyWind()
+          // this.velocityLayer._destroyWind()
         },
         components: {}
     }

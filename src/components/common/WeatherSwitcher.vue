@@ -7,17 +7,19 @@
                 <!-- <img class="imgIcon" :src="require('../../../static/images/weatherType/wind_select.png')"> -->
                 <p class="titleContent">{{fieldCell.name}}</p>
             </div>
-            <div class="fieldCellContent" v-if="currentIndex === index">
-                {{fieldCell.paramsLabel ? `${fieldCell.paramsLabel.label}:` : ""}}
-                <el-select class="selcetContent" size="small" @change="sendParams" v-model="value" :placeholder="`${Object.values(fieldCell.paramsOptions[0]) ? `${Object.values(fieldCell.paramsOptions[0]).toString()}` : ''}`">
-                    <el-option
-                        v-for="(item,itemIndex) in fieldCell.paramsOptions"
-                        :key="itemIndex"
-                        :label="`${Object.values(item) ? `${Object.values(item).toString()}` : ''}`"
-                        :value="`${Object.values(item) ? `${Object.values(item).toString()}` : ''}`">
-                    </el-option>
-                </el-select>
-            </div>
+            <transition name="slide-fade">
+                <div class="fieldCellContent" v-if="currentIndex === index">
+                    {{fieldCell.paramsLabel ? `${fieldCell.paramsLabel.label}:` : ""}}
+                    <el-select class="selcetContent" size="small" @change="sendParams" v-model="value" :placeholder="`${Object.values(fieldCell.paramsOptions[0]) ? `${Object.values(fieldCell.paramsOptions[0]).toString()}` : ''}`">
+                        <el-option
+                            v-for="(item,itemIndex) in fieldCell.paramsOptions"
+                            :key="itemIndex"
+                            :label="`${Object.values(item) ? `${Object.values(item).toString()}` : ''}`"
+                            :value="`${Object.values(item) ? `${Object.values(item).toString()}` : ''}`">
+                        </el-option>
+                    </el-select>
+                </div>
+            </transition>
         </div>
     </div>
 </template>
@@ -101,6 +103,7 @@
             changeType(index){
                 if(this.currentIndex !== index){
                     this.currentIndex = index;
+                    this.value = null;   // type切换后，每次清理数据以防旧数据干扰
                     this.$store.dispatch('ACTION_WEATHER_TYPE', {
                         weatherType: this.currentIndex,
                     })
@@ -141,39 +144,37 @@
     color: #000;
     border-radius: 5px;
 }
-
 .active {
     display: flex;
     flex-direction: row;
-    width: 150px;
-    height: 30px;
+    width: 182px;
+    height: 36px;
+    border-radius: 18px;
+    font-size: 14px;
     justify-content: space-around;
     align-items: center;
-    border-radius: 5px;
     background: #409EFF; 
     color: #ffffff;
-    border-radius: 15px;
     margin: 5px 0;
 }
 .fieldTitle {
     display: flex;
     flex-direction: row;
-    width: 150px;
-    height: 30px;
+    width: 182px;
+    height: 36px;
+    border-radius: 18px;
+    font-size: 14px;
     justify-content: space-around;
     align-items: center;
     background: #fff;
     color: #409EFF;
-    border-radius: 15px;
+    border-radius: 20px;
     margin: 5px 0;
 }
-
 .imgIcon {
     width: 25px;
     height: 25px;
 }
-
-
 .fieldCellContent{
     color: #fff;
     margin: 10px 0;
@@ -182,17 +183,32 @@
     width: 150px;
     border-radius: 15px;
 }
+
+/* 可以设置不同的进入和离开动画 */
+/* 设置持续时间和动画函数 */
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */ {
+  transform: translateX(20px);
+  opacity: 0;
+}
+
 .el-select>>>.el-input__inner {
     color: #ffffff;
     padding: 0 10px;
     height: 30px;
     border-color: #409eff;
-    /* background: #409eff; 
+    background: #409eff; 
     border-color: #409eff;
-    */
+    opacity: 0.8;
+/*    
     background: #00192e;
-    border-color: #00192e;
-
+    border-color: #00192e; */
 }
 .el-input--suffix>>>.el-input__inner {
     padding-right: 25px;
@@ -228,7 +244,6 @@
     color:#fff; 
     font-size:16px; 
 }
-
 .el-select>>>.el-input__inner::-moz-placeholder,textarea::-moz-placeholder{ 
     color:#fff; 
     font-size:12px; 
@@ -237,7 +252,6 @@
     color:#fff; 
     font-size:12px; 
 }
-
 .el-scrollbar__view>>>.el-select-dropdown__item{
     font-size: 12px;
 }
