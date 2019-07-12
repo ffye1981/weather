@@ -1,5 +1,13 @@
 <template>
-  <transition name="bounce">
+  <transition 
+    appear
+    appear-class="custom-appear-class"
+    appear-to-class="custom-appear-to-class" 
+    appear-active-class="custom-appear-active-class" 
+   >
+<!-- <transition name="fade" mode="in-out"> -->
+<!-- <transition name="bounce" mode="in-out"> -->
+    
     <div class="weatherLegendContent">
         <p class="unitCss">{{unit}}</p>
         <div class="boxContent">
@@ -117,6 +125,21 @@
         border-radius: 0px 0px 5px 5px;
     }
 
+/* 
+     appear-class="custom-appear-class"
+    appear-to-class="custom-appear-to-class" 
+    appear-active-class="custom-appear-active-class"  */
+
+    .custom-appear-to-class{
+        animation: bounce-in 0.3s;
+    }
+    .custom-appear-class {
+         animation: bounce-in 0.8s reverse;
+    }
+    .custom-appear-active-class{
+        animation: bounce-in 0.5s reverse;
+    }
+
     .bounce-enter-active {
         animation: bounce-in .5s;
     }
@@ -134,5 +157,9 @@
             transform: scale(1);
         }
     }
+
+
+
+ 
 
 </style>
