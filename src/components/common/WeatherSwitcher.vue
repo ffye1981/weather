@@ -1,14 +1,14 @@
 <template>
     <div class="weatherSwitcher">
-        <div v-for="(fieldCell,index) in fieldContent" @click="changeType(index)" >   
+        <div v-for="(fieldCell,index) in fieldContent" @click="changeType(index)" :key= index>   
         <!-- <div v-for="(fieldCell,index) in fieldContent" @click="currentIndex = index" >    -->
             <div :class="currentIndex === index ? 'active': 'fieldTitle'">
                 <img class="imgIcon" :src="currentIndex === index ? require(`../../../static/images/weatherType/${fieldCell.type}_select.png`) :  require(`../../../static/images/weatherType/${fieldCell.type}_unselect.png`)" alt="">
-                <!-- <img class="imgIcon" :src="require('../../../static/images/weatherType/wind_select.png')"> -->
                 <p class="titleContent">{{fieldCell.name}}</p>
             </div>
-            <transition name="slide-fade">
-                <div class="fieldCellContent" v-if="currentIndex === index">
+            <!-- <transition name="slide-fade" v-if="fieldCell.paramsOptions.length !== 1"> -->
+            <transition name="slide-fade" >
+                <div class="fieldCellContent" v-show="currentIndex === index">
                     {{fieldCell.paramsLabel ? `${fieldCell.paramsLabel.label}:` : ""}}
                     <el-select class="selcetContent" size="small" @change="sendParams" v-model="value" :placeholder="`${Object.values(fieldCell.paramsOptions[0]) ? `${Object.values(fieldCell.paramsOptions[0]).toString()}` : ''}`">
                         <el-option
@@ -25,7 +25,8 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex'
+    import {mapState} from 'vuex';
+    import fieldContentData from '../constant/weatherSwitcher.js'
     export default {
         name: 'WeatherSwitcher',
         data() {
@@ -33,57 +34,7 @@
                 field: null,
                 currentIndex: 0,
                 value: null,
-                fieldContent: {
-                    0: {
-                        type: "wind",
-                        name: "风量",
-                        iconPng: "wind_unselect.png",
-                        iconPngSelect: "wind_select.png",
-                        paramsLabel: {
-                            label:"高度",
-                            value: "height"
-                        },
-                        paramsOptions: [              
-                            {
-                                atmosphere: 0,
-                                height: "200m"
-                            },
-                            {
-                                atmosphere11: "1000kpa",
-                                height: "1000m"
-                            },
-                            {
-                                atmosphere: "2000kpa",
-                                height: "2000m"
-                            },
-                        ]
-                    },
-                    1: {
-                        type: "temperature",
-                        name: "温度",
-                        iconPng: "temperature_unselect.png",
-                        iconPngSelect: "temperature_select.png",
-                        paramsLabel: "温度",
-                        paramsLabel: {
-                            label:"温度",
-                            value: "height"
-                        },
-                        paramsOptions: [
-                            {
-                                atmosphere: 0
-                            },
-                            {
-                                atmosphere: "1000kpa",
-                                height: "1000m"
-                            },
-                            {
-                                atmosphere: "2000kpa",
-                                height: "2000m"
-                            },
-                        ]
-                    },
-                }
-
+                fieldContent: fieldContentData,
             }
         },
         props: {},
@@ -148,28 +99,29 @@
     display: flex;
     flex-direction: row;
     width: 182px;
-    height: 36px;
+    height: 30px;
     border-radius: 18px;
-    font-size: 14px;
+    font-size: 12px;
     justify-content: space-around;
     align-items: center;
     background: #409EFF; 
     color: #ffffff;
-    margin: 5px 0;
+    margin: 3px 0;
 }
 .fieldTitle {
     display: flex;
     flex-direction: row;
-    width: 182px;
-    height: 36px;
+    width: 122px;
+    height: 30px;
     border-radius: 18px;
-    font-size: 14px;
-    justify-content: space-around;
+    font-size: 12px;
     align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
     background: #fff;
     color: #409EFF;
     border-radius: 20px;
-    margin: 5px 0;
+    margin: 3px 0;
 }
 .imgIcon {
     width: 25px;
@@ -177,7 +129,7 @@
 }
 .fieldCellContent{
     color: #fff;
-    margin: 10px 0;
+    margin: 5px 0;
 }
 .selcetContent{
     width: 150px;
@@ -252,7 +204,7 @@
     color:#fff; 
     font-size:12px; 
 }
-.el-scrollbar__view>>>.el-select-dropdown__item{
+.el-el-select-dropdown>>>.el-select-dropdown__item{
     font-size: 12px;
 }
 
