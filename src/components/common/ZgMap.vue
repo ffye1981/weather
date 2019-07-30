@@ -3,6 +3,8 @@
 </template>
 
 <script>
+
+// 解决闪电那些动态图
     import Vue from 'vue'
     export default {
         name: 'ZgMap',
@@ -128,5 +130,5 @@
 
 <style scoped>
   body { margin:0; padding:0; }
-  #map { position: absolute; top:0; bottom:0; right:0; left:0; z-index: -1}
+  #map { height: 100%; position: absolute; top:0; bottom:0; right:0; left:0; z-index: -1}
 </style>

@@ -33,7 +33,7 @@
                 var layer = L.tileLayer(config.mapConfig.baseLayer.url).addTo(this.map);
                 var greenIcon = L.icon({
                     // iconUrl: "../../assets/newIcon/locationGreen.png",
-                    iconUrl: require("../../assets/newIcon/locationGreen.png"),      // webpack打包项目中，图片显示问题
+                    iconUrl: require("../../assets/newIcon/point.gif"),      // webpack打包项目中，图片显示问题
                     shadowUrl: require("../../assets/newIcon/locationGrey.png"),
                     iconSize:     [38, 95], // size of the icon
                     shadowSize:   [50, 64], // size of the shadow

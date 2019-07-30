@@ -98,7 +98,7 @@
 .active {
     display: flex;
     flex-direction: row;
-    width: 182px;
+    width: 112px;
     height: 30px;
     border-radius: 18px;
     font-size: 12px;
@@ -107,21 +107,23 @@
     background: #409EFF; 
     color: #ffffff;
     margin: 3px 0;
+    opacity: 0.9;
 }
 .fieldTitle {
     display: flex;
     flex-direction: row;
-    width: 122px;
+    width: 92px;
     height: 30px;
     border-radius: 18px;
     font-size: 12px;
     align-items: center;
     justify-content: space-between;
-    padding: 0 30px;
+    padding: 0 10px;
     background: #fff;
     color: #409EFF;
     border-radius: 20px;
     margin: 3px 0;
+    opacity: 0.9;
 }
 .imgIcon {
     width: 25px;
@@ -132,7 +134,7 @@
     margin: 5px 0;
 }
 .selcetContent{
-    width: 150px;
+    width: 80px;
     border-radius: 15px;
 }
 

@@ -8,7 +8,9 @@ import { SET_WEATHER_TYPE, SET_WEATHER_OPTION } from "../mutation-types";
 // initial state
 const state = {
   weatherType: 0, // 0 = 风
-  weatherParams: null
+  weatherParams: {
+    height: "10km"
+  }
 };
 
 // getters

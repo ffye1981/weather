@@ -5,11 +5,11 @@
   <el-button icon="el-icon-d-arrow-left" circle @click="calValue('reduce')"></el-button>
   <el-slider
     :min="0"
-    :max="22"
+    :max="21"
     v-model="value"
     :format-tooltip="formatTooltip"
     :show-tooltip="false"
-    :step="2"
+    :step="3"
     :marks="marks"
     @change="change"
   >
@@ -34,17 +34,11 @@
                     },
                     label: this.$createElement('strong', '00:00')
                   },
-                  2: {
+                  3: {
                     style: {
                       color: '#ffffff'
                     },
-                    label: this.$createElement('strong', '02:00')
-                  },
-                  4: {
-                    style: {
-                      color: '#ffffff'
-                    },
-                    label: this.$createElement('strong', '04:00')
+                    label: this.$createElement('strong', '03:00')
                   },
                   6: {
                     style: {
@@ -52,17 +46,11 @@
                     },
                     label: this.$createElement('strong', '06:00')
                   },
-                  8: {
+                  9: {
                     style: {
                       color: '#ffffff'
                     },
-                    label: this.$createElement('strong', '08:00')
-                  },
-                  10: {
-                    style: {
-                      color: '#ffffff'
-                    },
-                    label: this.$createElement('strong', '10:00')
+                    label: this.$createElement('strong', '09:00')
                   },
                   12: {
                     style: {
@@ -70,17 +58,11 @@
                     },
                     label: this.$createElement('strong', '12:00')
                   },
-                  14: {
+                  15: {
                     style: {
                       color: '#ffffff'
                     },
-                    label: this.$createElement('strong', '14:00')
-                  },
-                  16: {
-                    style: {
-                      color: '#ffffff'
-                    },
-                    label: this.$createElement('strong', '16:00')
+                    label: this.$createElement('strong', '15:00')
                   },
                   18: {
                     style: {
@@ -88,18 +70,12 @@
                     },
                     label: this.$createElement('strong', '18:00')
                   },
-                  20: {
+                  21: {
                     style: {
                       color: '#ffffff'
                     },
-                    label: this.$createElement('strong', '20:00')
+                    label: this.$createElement('strong', '21:00')
                   },
-                  22: {
-                    style: {
-                      color: '#ffffff'
-                    },
-                    label: this.$createElement('strong', '22:00')
-                  }
                 },
                 timer: null
             }

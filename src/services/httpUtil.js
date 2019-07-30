@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from "axios";
 
 /**
  * 使用Vuex的store之前需要先引入，
@@ -6,7 +6,7 @@ import axios from 'axios'
  * 2.通过store.commit('mutations中的方法名',tokenStr)设置属性值
  */
 
-function initAxios () {
+function initAxios() {
   // axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8'
   /*
   if (headers) {
@@ -40,28 +40,38 @@ function initAxios () {
  * @param hasParamUrl  请求url（已经拼接好的路径）
  * @param callback 回调函数
  */
-export function getData (hasParamUrl, params, headers, callback) {
-  if (hasParamUrl == null) return
-  initAxios()
+export function getData(hasParamUrl, params, headers, callback) {
+  if (hasParamUrl == null) return;
+  initAxios();
   let config = {
     headers: headers
-  }
-  const paramArr = []
+  };
+  const paramArr = [];
   if (params) {
     for (var key in params) {
-      paramArr.push(key + '=' + params[key])
+      if (key === "refTime") {
+        paramArr.push(key + "=" + escape(params[key]));
+      } else {
+        paramArr.push(key + "=" + params[key]);
+      }
     }
   }
-  var url = hasParamUrl
+  var url = hasParamUrl;
   if (paramArr.length > 0) {
-    url += ('?' + paramArr.join('&'))
+    url += "?" + paramArr.join("&");
   }
-  axios.get(url, config).then(function (response) {
-    backView(response, callback)
-  }).catch(function (error) {
-    callback(null, '请求报错')
-    console.log(error)
-  })
+  // url = encodeURI(url);
+  // url = escape(url);
+  // url = encodeURIComponent(url);
+  axios
+    .get(url, config)
+    .then(function(response) {
+      backView(response, callback);
+    })
+    .catch(function(error) {
+      callback(null, "请求报错");
+      console.log(error);
+    });
 }
 
 /**
@@ -72,18 +82,21 @@ export function getData (hasParamUrl, params, headers, callback) {
  *      param.append("name", "mirzhao");
  * @param callback 回调函数
  */
-export function postData (requestUrl, params, headers, callback) {
-  debugger
-  initAxios()
+export function postData(requestUrl, params, headers, callback) {
+  debugger;
+  initAxios();
   let config = {
     headers: headers
-  }
-  axios.post(requestUrl, params, config).then(function (response) {
-    backView(response, callback)
-  }).catch(function (error) {
-    callback(null, '请求报错')
-    console.log(error)
-  })
+  };
+  axios
+    .post(requestUrl, params, config)
+    .then(function(response) {
+      backView(response, callback);
+    })
+    .catch(function(error) {
+      callback(null, "请求报错");
+      console.log(error);
+    });
 }
 
 /**
@@ -94,17 +107,20 @@ export function postData (requestUrl, params, headers, callback) {
  *      param.append("name", "mirzhao");
  * @param callback 回调函数
  */
-export function postStringParamData (requestUrl, params, headers, callback) {
-  initAxios()
+export function postStringParamData(requestUrl, params, headers, callback) {
+  initAxios();
   let config = {
     headers: headers
-  }
-  axios.post(requestUrl, JSON.stringify(params), config).then(function (response) {
-    backView(response, callback)
-  }).catch(function (error) {
-    callback(null, '请求报错' + error)
-    console.log(error)
-  })
+  };
+  axios
+    .post(requestUrl, JSON.stringify(params), config)
+    .then(function(response) {
+      backView(response, callback);
+    })
+    .catch(function(error) {
+      callback(null, "请求报错" + error);
+      console.log(error);
+    });
 }
 
 /**
@@ -116,16 +132,19 @@ export function postStringParamData (requestUrl, params, headers, callback) {
  *      param.append('file',file2,fileName2);//通过append向form对象添加数据
  *      param.append('file',file3,fileName3);//通过append向form对象添加数据
  */
-export function postFile (uploadFileUrl, formData, callback) {
+export function postFile(uploadFileUrl, formData, callback) {
   let config = {
-    headers: {'Content-Type': 'multipart/form-data'}
-  }
-  axios.post(uploadFileUrl, formData, config).then(function (response) {
-    backView(response, callback)
-  }).catch(function (error) {
-    callback(null, '请求报错' + error)
-    console.log(error)
-  })
+    headers: { "Content-Type": "multipart/form-data" }
+  };
+  axios
+    .post(uploadFileUrl, formData, config)
+    .then(function(response) {
+      backView(response, callback);
+    })
+    .catch(function(error) {
+      callback(null, "请求报错" + error);
+      console.log(error);
+    });
 }
 
 /**
@@ -133,21 +152,25 @@ export function postFile (uploadFileUrl, formData, callback) {
  * @param response
  * @param callback
  */
-function backView (response, callback) {
+function backView(response, callback) {
   // console.log(response.data)
-  if (response != null && (response.data.code === 0 || response.data.code === 200) && response.data.data != null) {
+  if (
+    response != null &&
+    (response.data.code === 0 || response.data.code === 200) &&
+    response.data.data != null
+  ) {
     // console.log('请求成功')
     if (callback != null) {
-      callback(response.data.data, response.data.total)
+      callback(response.data.data, response.data.total);
     }
   } else if (response != null && response.data.features != null) {
     if (callback != null) {
-      callback(response.data.features, response.data.allCount)
+      callback(response.data.features, response.data.allCount);
     }
   } else {
     // console.log('请求失败')
     if (callback != null) {
-      callback(null, response.msg)
+      callback(null, response.msg);
     }
   }
 }
@@ -162,4 +185,4 @@ export default {
   postData,
   postStringParamData,
   postFile
-}
+};

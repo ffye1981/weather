@@ -6,6 +6,8 @@
     <weather-tips :params_in="params"></weather-tips>
     <weather-legend ></weather-legend>
     <weather-swticher></weather-swticher>
+    <!-- <test></test>   -->
+    <!-- <test-Point></test-Point> -->
   </div>
 </template>
 
@@ -17,6 +19,9 @@
   import weatherTips from './components/common/WeatherTips';
   import weatherLegend from './components/common/WeatherLegend';
   import weatherSwticher from './components/common/WeatherSwitcher';
+  import test from "./components/common/test"
+
+  import testPoint from "./components/common/marker_with_custom_icons"
 
   export default {
       name: 'App',
@@ -50,7 +55,9 @@
         wind,
         weatherTips,
         weatherLegend,
-        weatherSwticher
+        weatherSwticher,
+        // test,
+        // testPoint
       }
   }
 </script>

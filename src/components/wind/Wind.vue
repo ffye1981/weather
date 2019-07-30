@@ -1,15 +1,21 @@
 <template>
   <!--<el-button @click="getNextData">默认按钮</el-button>-->
+  <div
+    :class="showLoading ? 'loadingCss' :'noLoading'"
+    >
    <canvas ref="legendCanvas" width="30" height="130" style="display: none"></canvas>
+  </div>
 </template>
 
 <script>
     import {mapState} from 'vuex'
+    import weatherNameData from '../constant/weatherNameData.js'
 
     export default {
         name: 'Wind',
         data() {
             return {
+              showLoading: false,
               windData:[],
               velocityLayer: null,
               heatCfg: {
@@ -51,7 +57,9 @@
         computed: {
           ...mapState({
             playTime: state => state.timeSlider.playTime,
-            loadMapSuccess: state => state.map.loadMapSuccess
+            loadMapSuccess: state => state.map.loadMapSuccess,
+            weatherType: state => state.weatherSwitcher.weatherType, 
+            weatherParams: state => state.weatherSwitcher.weatherParams,
           }),
         },
         watch: {
@@ -59,6 +67,7 @@
               // console.log('playTime改变之前的值：' + preVal + '；改变之后的值：' + newVal)
               var hour = new Date(Date.parse(newVal.replace(/-/g, "/"))).getHours();
               if(this.velocityLayer) {
+                this.showLoading = true;
                 this.getData(hour)
               }
           },
@@ -133,10 +142,12 @@
                 //       [bounds._northEast.lng, bounds._northEast.lat] ]
                 //   ]
                 // });
-                var that = this
-                this.$http.getData('static/data/gfs.t00z.pgrb2.1p00.f'+hour+'.json',{time: this.playTime}, {}, function (data, msg) {
-                  //this.$http.getData(config.services.baseUrl + config.services.wind.windData, {time: this.playTime,wkt:polygon}, {}, function (data, msg) {
-                    that.windData = data
+                var that = this;
+                // this.$http.getData(  weatherNameData[weatherType]   'static/data/gfs.t00z.pgrb2.1p00.f'+hour+'.json',{time: this.playTime}, {}, function (data, msg) {
+                this.$http.getData(config.services.baseUrl + weatherNameData[this.weatherType] + "/findOneGrib", {refTime: this.playTime, surfaceValue: parseInt(this.weatherParams.height) * 1000}, {}, function (data, msg) {
+                  //  console.log("findOneGrib", data);
+                  that.showLoading = false;
+                  that.windData = data
                 })
             },
             getNextData() {
@@ -241,4 +252,34 @@
     outline: 3px solid black;
     line-height: 1em;
   }
+  .loadingCss {
+    margin: 0  auto;
+    margin-top: 50vh;
+    display: block;
+    width: 68px;
+    height: 68px;
+    background: url(../../assets/newIcon/loading.png) no-repeat;
+    animation: loading 0.8s infinite;
+    -webkit-animation:loading 0.8s infinite;
+  }
+  @keyframes loading {
+    25% {
+      transform: rotate(90deg);
+    }
+    50% {
+      transform: rotate(180deg);
+    }
+    75% {
+      transform: rotate(270deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  .noLoading {
+    display: none;
+    width: 68px;
+    height: 68px;
+  }
+
 </style>
