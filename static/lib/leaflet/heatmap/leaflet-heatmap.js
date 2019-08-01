@@ -188,22 +188,29 @@
       var Δφ = header.la2> header.la1? header.dy: -header.dy;    // distance between grid points (e.g., 2.5 deg lon, 2.5 deg lat)
 
       var grid = [];
-      var max = 0,min = 10000000000,p = 0;
+      var max = -10000000000,min = 10000000000,p = 0;
       var uvArr;
       for (var j = 0; j < header.ny; j++) {
         for (var i = 0; i < header.nx; i++, p++) {
           uvArr = builder.data(p);
-          var speed = Math.sqrt(Math.pow(uvArr[0],2) + Math.pow(uvArr[1],2))
-          // max = max < speed ? speed : max
-          max = Math.max(max,speed);
-          min = Math.min(min,speed);
+          var speed = 0;
+          var _onConverUnit = this.cfg.onConverUnit || this._onConverUnit;
+          var value = _onConverUnit(uvArr, header.parameterUnit);
+          // if(uvArr.length > 1) {
+          //   speed = Math.sqrt(Math.pow(uvArr[0],2) + Math.pow(uvArr[1],2))
+          // }else {
+          //   speed = uvArr[0];
+          // }
+          max = Math.max(max,value);
+          min = Math.min(min,value);
           grid.push({
             "lats": header.la1 + j * Δφ,
             "lons": header.lo1 + i * Δλ,
-            "speed": speed
+            "value": value
           });
         }
       }
+      console.log("setGribData- max:" + max + ",min:" + min)
       this.setData({
         max: max,
         min: min,
@@ -261,23 +268,39 @@
         }
       }
     },
-    _createBuilder: function(data) {
-      var uComp = null, vComp = null, scalar = null;
-      data.forEach(function(record) {
-        switch (record.header.parameterCategory + "," + record.header.parameterNumber) {
-          case "1,2":
-          case "2,2":
-            uComp = record;
-            break;
-          case "1,3":
-          case "2,3":
-            vComp = record;
-            break;
-          default:
-            scalar = record;
+    _createOtherBuilder: function(comp) {
+      return {
+        header: comp.header,
+        data: function(i) {
+          return [comp.data[i]];
         }
-      });
-      return this._createWindBuilder(uComp, vComp);
+      }
+    },
+    _createBuilder: function(data) {
+      if(data instanceof Array){
+        var uComp = null, vComp = null, scalar = null;
+        data.forEach(function(record) {
+          switch (record.header.parameterCategory + "," + record.header.parameterNumber) {
+            case "1,2":
+            case "2,2":
+              uComp = record;
+              break;
+            case "1,3":
+            case "2,3":
+              vComp = record;
+              break;
+            default:
+              uComp = record;
+          }
+        });
+        return this._createWindBuilder(uComp, vComp);
+      }else {
+        return this._createOtherBuilder(data);
+      }
+
+    },
+    _onConverUnit: function(data, unit) {
+      return data;
     }
   });
 

@@ -147,7 +147,7 @@ var Windy = function(params) {
       }
       grid[j] = row;
     }
-    console.timeEnd("运行时间：");
+    console.timeEnd("运行时间：" + grid[0][0]);
     callback(
       {
         date: date,

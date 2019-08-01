@@ -37,7 +37,8 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
   },
 
   setData: function setData(windData) {
-    this.options.data = windData;
+    // this.options.data = windData;
+    this._windy.setData(windData);
     this._clearWind();
     this._startWindyShake();
   },

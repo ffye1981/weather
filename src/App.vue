@@ -3,6 +3,7 @@
     <zg-map></zg-map>
     <time-slider></time-slider>
     <wind v-if="weatherType == 0"></wind>
+    <temperature v-if="weatherType == 1"></temperature>
     <weather-tips :params_in="params"></weather-tips>
     <weather-legend ></weather-legend>
     <weather-swticher></weather-swticher>
@@ -16,6 +17,7 @@
   import zgMap from './components/common/ZgMap'
   import timeSlider from './components/common/TimeSlider'
   import wind from './components/wind/Wind'
+  import temperature from './components/Temperature'
   import weatherTips from './components/common/WeatherTips';
   import weatherLegend from './components/common/WeatherLegend';
   import weatherSwticher from './components/common/WeatherSwitcher';
@@ -53,6 +55,7 @@
         zgMap,
         timeSlider,
         wind,
+        temperature,
         weatherTips,
         weatherLegend,
         weatherSwticher,
