@@ -48,8 +48,8 @@
                   minZoom: 3
                 });
                 var normalm4 = L.tileLayer.chinaProvider('Geoq.Normal.Gray', {
-                  maxZoom: 18,
-                  minZoom: 5
+                  maxZoom: 16,
+                  minZoom: 3
                 });
                 // var normalm5 = L.tileLayer.chinaProvider('Geoq.Normal.Warm', {
                 //   maxZoom: 18,
@@ -109,14 +109,14 @@
                 // });
                 // var Gaodimage = L.layerGroup([Gaodimgem, Gaodimga]);
                 this.map = L.map('map',{
-                  layers: [normalm3],
+                  layers: [normalm4],
                   zoomControl: false
                 }).setView(config.mapConfig.view.center,config.mapConfig.view.zoom)
                 this.map.on('zoomend',function (e) {
                   // console.log('zoomend - zoom：'+ e.target.getZoom())
                 })
                 // var layer = L.tileLayer(config.mapConfig.baseLayer.url).addTo(this.map)
-                normalm3.on('load', function (e) {
+              normalm4.on('load', function (e) {
                   that.$store.dispatch('ACTION_MAP_STATE', true)
                   Vue.prototype.$Maps = that.map
                 })

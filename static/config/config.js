@@ -13,10 +13,9 @@ var config = {
     }
   },
   services: {
-    // baseUrl: "http://localhost:8800", // test
     baseUrl: "http://192.168.201.57:8830/",
     wind: {
-      windData: "/wind/list"
+      windData: "/component_of_wind/findOneGrib"
     }
   }
 };
