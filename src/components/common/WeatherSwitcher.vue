@@ -92,6 +92,7 @@
     /* text-align: center; */
     font-size: 12px;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .fieldCss {

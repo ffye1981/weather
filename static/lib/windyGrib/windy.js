@@ -131,7 +131,6 @@ var Windy = function(params) {
       _max = 0;
     for (let j = 0; j < nj; j++) {
       var row = [];
-      console.time("运行时间:");
       for (let i = 0; i < ni; i++, p++) {
         row[i] = builder.data(p);
         var u = row[i][0];
@@ -147,7 +146,6 @@ var Windy = function(params) {
       }
       grid[j] = row;
     }
-    console.timeEnd("运行时间：");
     callback(
       {
         date: date,
@@ -418,6 +416,7 @@ var Windy = function(params) {
       MIN_VELOCITY_INTENSITY,
       MAX_VELOCITY_INTENSITY
     );
+    console.log("colorStyles", colorStyles);
     var buckets = colorStyles.map(function() {
       return [];
     });
@@ -556,7 +555,7 @@ var Windy = function(params) {
     return {
       minVelocityIntensity: MIN_VELOCITY_INTENSITY,
       maxVelocityIntensity: MAX_VELOCITY_INTENSITY,
-      defaulColorScale: defaulColorScale
+      colorScale: colorScale
     };
   };
 

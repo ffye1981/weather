@@ -3,7 +3,7 @@
   <div
     :class="showLoading ? 'loadingCss' :'noLoading'"
     >
-   <canvas ref="legendCanvas" width="30" height="130" style="display: none"></canvas>
+   <canvas ref="legendCanvas" width="30" height="270" style="display: none"></canvas>
   </div>
 </template>
 
@@ -84,7 +84,10 @@
               var hour = new Date(Date.parse(newVal.replace(/-/g, "/"))).getHours();
               if(this.velocityLayer) {
                 this.showLoading = true;
-                this.getData(hour)
+                this.getData(hour);
+                
+                let legendData = this.velocityLayer._getWindyDefaultData();
+                this.updateLegend(legendData);
               }
           },
           weatherParams: function (newVal, preVal) {
@@ -93,6 +96,8 @@
               if(this.velocityLayer) {
                 this.showLoading = true;
                 this.getData(hour)
+                let legendData = this.velocityLayer._getWindyDefaultData();
+                this.updateLegend(legendData);
               }
           },
           loadMapSuccess: function (newVal, preVal) {
@@ -101,6 +106,10 @@
                 this.$Maps.addLayer(this.lyrGroup);
                 // this.initLayer()
                 this.getData(0)
+                // if(this.velocityLayer) {
+                //   let legendData = this.velocityLayer._getWindyDefaultData();
+                //   this.updateLegend(legendData);
+                // }
               }
           },
           windData: function (newVal, preVal) {
@@ -108,10 +117,34 @@
                   this.velocityLayer.setData(newVal);
                   console.log("velocityLayer_newVal", this.velocityLayer._getWindyDefaultData());
                   // this.heatLayer.setGribData(this.windData);
+                  let legendData = this.velocityLayer._getWindyDefaultData();
+                  this.updateLegend(legendData);
               }else {
                   this.initLayer();
 
-
+                  let defaulColorScale = [
+                    "rgb(36,104, 180)",
+                    "rgb(60,157, 194)",
+                    "rgb(128,205,193 )",
+                    "rgb(151,218,168 )",
+                    "rgb(198,231,181)",
+                    "rgb(238,247,217)",
+                    "rgb(255,238,159)",
+                    "rgb(252,217,125)",
+                    "rgb(255,182,100)",
+                    "rgb(252,150,75)",
+                    "rgb(250,112,52)",
+                    "rgb(245,64,32)",
+                    "rgb(237,45,28)",
+                    "rgb(220,24,32)",
+                    "rgb(180,0,35)"
+                  ];
+                  let legendData = {
+                        minVelocityIntensity: 0,
+                        maxVelocityIntensity: 60,
+                        colorScale: defaulColorScale
+                      };
+                  this.updateLegend(legendData);
               }
               // this.drawPoint();
           }
@@ -138,7 +171,7 @@
                     emptyString: '全球风场'
                   },
                   data: this.windData,
-                  maxVelocity: 0,
+                  maxVelocity: 60,
                   // colorScale: [
                   //   "rgb(255,255,255)"
                   // ],
@@ -156,8 +189,7 @@
                   }
                 });
               this.velocityLayer.addTo(this.$Maps);
-
-               console.log("velocityLayer_initLayer", this.velocityLayer._getWindyDefaultData());
+              console.log("velocityLayer_initLayer", this.velocityLayer._getWindyDefaultData());
             },
             getData(hour) {
                 // var bounds = this.$Maps.getBounds();
@@ -230,21 +262,37 @@
             updateLegend: function (data) {
               // the onExtremaChange callback gives us min, max, and the gradientConfig
               // so we can update the legend
-              // this.$refs.min.innerHTML = data.min
-              // this.$refs.max.innerHTML = data.max
-              var legendCtx = this.$refs.legendCanvas.getContext('2d')
-              var gradientCfg = data.gradient
-              var gradient = legendCtx.createLinearGradient(0, 150, 0, 0)
-              for (var key in gradientCfg) {
-                gradient.addColorStop(key, gradientCfg[key])
-              }
-              legendCtx.fillStyle = gradient
-              legendCtx.fillRect(0, 0, 30, 150)
-              // this.$refs.gradient.src = this.$refs.legendCanvas.toDataURL()
+          
+              let legendCtx = this.$refs.legendCanvas.getContext('2d');
+              let getWindyDefaultData = this.velocityLayer._getWindyDefaultData();
+              let max = getWindyDefaultData.maxVelocityIntensity;
+              let min = getWindyDefaultData.minVelocityIntensity;
+              let colorScale = getWindyDefaultData.colorScale;
+              let colorLength = colorScale.length;
+              let textData = [];
+              for (var i = 0; i < colorScale.length; i++){
+                legendCtx.fillStyle = colorScale[i];
+                let ratioData = 270 * i /(colorScale.length);
+                let colorHeight = 270 / colorScale.length;
+                // console.log("ratioData",i ,colorScale[i], colorHeight, ratioData);
+                // legendCtx.font="12px Arial";
+                // legendCtx.textAlign='center';
+                // legendCtx.textBaseline='middle';
+                let speendRate = ((max - min) * i / (colorScale.length - 1) + min).toFixed(1);
+                // legendCtx.fillText(speendRate, 0, ratioData,);
+                legendCtx.fillRect(
+                  0, ratioData, 30, colorHeight
+                );
+                console.log("ratioData",i , speendRate, colorScale[i], colorHeight, ratioData);
+                textData.push(speendRate);
+              };
+              console.log("textData",textData);
               this.$store.dispatch('ACTION_WEATHER_LEGEND', {
+                colorScale: data.colorScale,
+                textData: textData,
                 src: this.$refs.legendCanvas.toDataURL(),
-                max: data.max.toFixed(1),       //最大值
-                min: data.min.toFixed(1),       //最小值
+                max: max.toFixed(1),       //最大值
+                min: min.toFixed(1),       //最小值
                 unit: 'm/s'      //单位
               })
             }
@@ -266,7 +314,9 @@
         //   }
         // },
         destroyed: function () {
-          // this.velocityLayer._destroyWind()
+          if(this.velocityLayer){
+            this.velocityLayer._destroyWind();
+          }
         },
         components: {}
     }

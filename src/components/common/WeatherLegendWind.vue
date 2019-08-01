@@ -7,14 +7,16 @@
    >
 <!-- <transition name="fade" mode="in-out"> -->
 <!-- <transition name="bounce" mode="in-out"> -->
-    
     <div class="weatherLegendContent">
         <p class="unitCss">{{unit}}</p>
         <div class="boxContent">
-            <p class="maxContent">{{max}}</p>
-            <img :src="src" alt="" class="imgSrc">
+
+
+            <!-- textData -->
+            <!-- <p class="maxContent" v-for="(item,itemIndex) in textData " >{{max}}</p> -->
             <p class="minContent">{{min}}</p>
         </div>
+        <img :src="src" alt="" class="imgSrc">
     </div>
   </transition>
 </template>
@@ -24,7 +26,11 @@
     export default {
         name: 'WeatherLegend',
         data() {
-            
+
+            // for (var i = 0; i < this.colorScale.length; i++){
+            //     let speendRate = ((this.max - this.min) * (this.colorLength - i - 1) /(this.colorScale.length - 1)).toFixed(1)
+            //     this.textData.push(speendRate);
+            // }
             return {
                 // src: null,
                 // max: 0,
@@ -35,6 +41,8 @@
         props: {},
         computed: {
           ...mapState({
+            textData: state => state.weatherLegend.textData,
+            colorScale: state => state.weatherLegend.colorScale,
             src: state => state.weatherLegend.src,
             max: state => state.weatherLegend.max,
             min: state => state.weatherLegend.min,
@@ -50,8 +58,6 @@
             console.log('component created')
         },
         mounted() {
-            // var aa = typeof getWindyDefaultData;
-            // console.log('mounted_legend', aa, getWindyDefaultData , this.velocityLayer._initWindy, this.velocityLayer._initWindy.params);
             // console.log('mounted_legend',getWindyDefaulColorScale, this.velocityLayer._initWindy, getWindyDefaulColorScale.sendWindyDefaulColorScale(), this.velocityLayer._initWindy.params);
         },
         methods: {
@@ -93,6 +99,7 @@
         border-radius: 0px 0px 5px 5px;
     }
     .unitCss {
+        position: relative;
         height: 20px;
         line-height: 20px;
         text-align: center;
@@ -100,7 +107,14 @@
         border-radius: 5px 5px 0px 0px;
     }
     .boxContent {
-        position: relative;
+        width: 30px;
+        height: 270px;
+        position: absolute;
+        top: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;  
     }
     .maxContent {
         padding: 0;
