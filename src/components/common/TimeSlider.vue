@@ -168,8 +168,8 @@
     display: flex;
     flex-direction: row;
     position: absolute;
-    width: calc(100% - 70px);
-    left: 35px;
+    width: calc(100% - 270px);
+    left:185px;
     bottom: 50px;
   }
 

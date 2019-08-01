@@ -38,7 +38,9 @@
             }
         },
         props: {},
-        computed: {},
+        computed: {
+            playTime: state => state.timeSlider.playTime,
+        },
         watch: {
             field: function (newVal, preVal) {
                 console.log('改变之前的值：' + preVal + '；改变之后的值：' + newVal)
@@ -68,7 +70,9 @@
                 console.log("sendParams", arrayOptions, this.value, selectOption);
                 this.$store.dispatch('ACTION_WEATHER_OPTION', {
                     weatherParams: selectOption, 
-                })
+                });
+                
+
             }
         },
         destroyed: function () {
@@ -84,7 +88,7 @@
     /* height: 180px; */
     position: absolute;
     left:  35px;
-    bottom: 100px;
+    bottom: 35px;
     /* text-align: center; */
     font-size: 12px;
     border-radius: 5px;

@@ -50,6 +50,9 @@
             console.log('component created')
         },
         mounted() {
+            // var aa = typeof getWindyDefaultData;
+            // console.log('mounted_legend', aa, getWindyDefaultData , this.velocityLayer._initWindy, this.velocityLayer._initWindy.params);
+            // console.log('mounted_legend',getWindyDefaulColorScale, this.velocityLayer._initWindy, getWindyDefaulColorScale.sendWindyDefaulColorScale(), this.velocityLayer._initWindy.params);
         },
         methods: {
             getList() {

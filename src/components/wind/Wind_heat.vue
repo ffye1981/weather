@@ -38,26 +38,10 @@
                 gradient: {
                   // enter n keys between 0 and 1 here
                   // for gradient color customization
-                  // .25: '#00192E',
-                  // .25: "rgb(36,104, 180)",
-                  // .50: 'green',
-                  // .75: 'yellow',
-                  // 1: 'red'
-                  0.0645: "rgb(36,104, 180)",
-                  0.1315: "rgb(60,157, 194)",
-                  0.1985: "rgb(128,205,193 )",
-                  0.2655: "rgb(151,218,168 )",
-                  0.3325: "rgb(198,231,181)",
-                  0.3995: "rgb(238,247,217)",
-                  0.4665: "rgb(255,238,159)",
-                  0.5335: "rgb(252,217,125)",
-                  0.6005: "rgb(255,182,100)",
-                  0.6675: "rgb(252,150,75)",
-                  0.7345: "rgb(250,112,52)",
-                  0.8015: "rgb(245,64,32)",
-                  0.8685: "rgb(237,45,28)",
-                  0.9355: "rgb(220,24,32)",
-                  1: "rgb(180,0,35)",
+                  .25: '#00192E',
+                  .50: 'green',
+                  .75: 'yellow',
+                  1: 'red'
                 },
                 onExtremaChange: function(data) {
                   // console.log('onExtremaChange' + data)
@@ -87,14 +71,6 @@
                 this.getData(hour)
               }
           },
-          weatherParams: function (newVal, preVal) {
-              // console.log('weatherParams改变之前的值：' + preVal + '；改变之后的值：' + newVal)
-              var hour = new Date(Date.parse(this.playTime.replace(/-/g, "/"))).getHours();
-              if(this.velocityLayer) {
-                this.showLoading = true;
-                this.getData(hour)
-              }
-          },
           loadMapSuccess: function (newVal, preVal) {
               // console.log('loadMapSuccess改变之前的值：' + preVal + '；改变之后的值：' + newVal)
               if(newVal) {
@@ -105,13 +81,10 @@
           },
           windData: function (newVal, preVal) {
               if(this.velocityLayer) {
-                  this.velocityLayer.setData(newVal);
-                  console.log("velocityLayer_newVal", this.velocityLayer._getWindyDefaultData());
-                  // this.heatLayer.setGribData(this.windData);
+                  this.velocityLayer.setData(newVal)
+                  this.heatLayer.setGribData(this.windData);
               }else {
-                  this.initLayer();
-
-
+                  this.initLayer()
               }
               // this.drawPoint();
           }
@@ -126,9 +99,9 @@
         },
         methods: {
             initLayer() {
-              // this.heatLayer = new HeatmapOverlay(this.heatCfg);
-              // this.heatLayer.addTo(this.$Maps);
-              // this.heatLayer.setGribData(this.windData);
+              this.heatLayer = new HeatmapOverlay(this.heatCfg);
+              this.heatLayer.addTo(this.$Maps);
+              this.heatLayer.setGribData(this.windData);
               var that = this
               this.velocityLayer = L.velocityLayer({
                   displayValues: true,
@@ -138,10 +111,10 @@
                     emptyString: '全球风场'
                   },
                   data: this.windData,
-                  maxVelocity: 0,
-                  // colorScale: [
-                  //   "rgb(255,255,255)"
-                  // ],
+                  maxVelocity: 30,
+                  colorScale: [
+                    "rgb(255,255,255)"
+                  ],
                   onMouseMove: function(angle,speed,unit,postion) {
                       // console.log('wind=top:'+ postion.y + '°,left:'+ postion.x)
                       //更新鼠标提示窗口
@@ -156,8 +129,6 @@
                   }
                 });
               this.velocityLayer.addTo(this.$Maps);
-
-               console.log("velocityLayer_initLayer", this.velocityLayer._getWindyDefaultData());
             },
             getData(hour) {
                 // var bounds = this.$Maps.getBounds();
@@ -173,7 +144,6 @@
                 // });
                 var that = this;
                 // this.$http.getData(  weatherNameData[weatherType]   'static/data/gfs.t00z.pgrb2.1p00.f'+hour+'.json',{time: this.playTime}, {}, function (data, msg) {
-                console.log(weatherNameData[this.weatherType], this.playTime, this.weatherParams.height);
                 this.$http.getData(config.services.baseUrl + weatherNameData[this.weatherType] + "/findOneGrib", {refTime: this.playTime, surfaceValue: parseInt(this.weatherParams.height) * 1000}, {}, function (data, msg) {
                   //  console.log("findOneGrib", data);
                   that.showLoading = false;
@@ -234,12 +204,12 @@
               // this.$refs.max.innerHTML = data.max
               var legendCtx = this.$refs.legendCanvas.getContext('2d')
               var gradientCfg = data.gradient
-              var gradient = legendCtx.createLinearGradient(0, 150, 0, 0)
+              var gradient = legendCtx.createLinearGradient(0, 130, 0, 0)
               for (var key in gradientCfg) {
                 gradient.addColorStop(key, gradientCfg[key])
               }
               legendCtx.fillStyle = gradient
-              legendCtx.fillRect(0, 0, 30, 150)
+              legendCtx.fillRect(0, 0, 30, 130)
               // this.$refs.gradient.src = this.$refs.legendCanvas.toDataURL()
               this.$store.dispatch('ACTION_WEATHER_LEGEND', {
                 src: this.$refs.legendCanvas.toDataURL(),
@@ -293,9 +263,6 @@
     -webkit-animation:loading 0.8s infinite;
   }
   @keyframes loading {
-    0% {
-      transform: rotate(0deg);
-    }
     25% {
       transform: rotate(90deg);
     }
