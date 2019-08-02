@@ -137,7 +137,18 @@
                 maxVelocity: 0,
                 colorScale: [
                   "rgb(255,255,255)"
-                ]
+                ],
+                onMouseMove: function(angle,speed,unit,postion) {
+                  var value = that.heatLayer.getValueAt(postion);
+                  //更新鼠标提示窗口
+                  that.shakeTimer = setTimeout(function(){
+                    that.$store.dispatch('ACTION_WEATHER_TIP', {
+                      text: value + ' ℃',
+                      top: postion.y,
+                      left: postion.x
+                    })
+                  }, 200);
+                }
               });
               this.velocityLayer.addTo(this.$Maps);
             },
