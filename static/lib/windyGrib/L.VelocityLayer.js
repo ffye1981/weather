@@ -56,7 +56,7 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
     }, 800);
   },
   _startWindy: function() {
-    console.log("VelocityLayer_startWindy....");
+    // console.log("VelocityLayer_startWindy....");
     if(this._windy) {
       var bounds = this._map.getBounds();
       var size = this._map.getSize();
@@ -66,7 +66,6 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
         [bounds._northEast.lng, bounds._northEast.lat]
       ]);
     }
-
   },
 
   _initWindy: function(self) {
@@ -119,7 +118,7 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
 
   // get windy getDefaultData
   _getWindyDefaultData: function(windData) {
-    console.log("Windy", this._windy, Windy);
+    // console.log("Windy", this._windy, Windy);
     return this._windy.sendWindyDefaulData();
     // return (this._windy = new Windy(options));
   }

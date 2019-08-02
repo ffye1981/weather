@@ -85,7 +85,7 @@ var Windy = function(params) {
     var uComp = null,
       vComp = null,
       scalar = null;
-
+    // console.log("createBuilder", data);
     data.forEach(function(record) {
       switch (
         record.header.parameterCategory + "," + record.header.parameterNumber
@@ -131,7 +131,6 @@ var Windy = function(params) {
       _max = 0;
     for (let j = 0; j < nj; j++) {
       var row = [];
-      // console.time("运行时间:");
       for (let i = 0; i < ni; i++, p++) {
         row[i] = builder.data(p);
         var u = row[i][0];
@@ -147,7 +146,6 @@ var Windy = function(params) {
       }
       grid[j] = row;
     }
-    // console.timeEnd("运行时间：" + grid[0][0]);
     callback(
       {
         date: date,
@@ -476,8 +474,6 @@ var Windy = function(params) {
     g.lineWidth = PARTICLE_LINE_WIDTH;
     g.fillStyle = fadeFillStyle;
 
-    // console.log("fadeFillStyle", fadeFillStyle);
-
     g.globalAlpha = 0.6;
 
     function draw() {
@@ -552,11 +548,10 @@ var Windy = function(params) {
   };
 
   var sendWindyDefaulData = function() {
-    // console.log("sendWindyDefaulColorScale", defaulColorScale);
     return {
       minVelocityIntensity: MIN_VELOCITY_INTENSITY,
       maxVelocityIntensity: MAX_VELOCITY_INTENSITY,
-      defaulColorScale: defaulColorScale
+      colorScale: colorScale
     };
   };
 
