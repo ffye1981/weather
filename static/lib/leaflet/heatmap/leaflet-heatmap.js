@@ -210,14 +210,16 @@
           });
         }
       }
-      console.log("setGribData- max:" + max + ",min:" + min)
+      // console.log("setGribData- max:" + max + ",min:" + min)
       this.setData({
         max: max,
         min: min,
         data: grid
       })
     },
-    // experimential... not ready.
+    getValueAt: function (post) {
+      return this._heatmap.getValueAt(post)
+    },
     addData: function(pointOrArray) {
       if (pointOrArray.length > 0) {
         var len = pointOrArray.length;

@@ -1,6 +1,6 @@
 <template>
-  <!--<el-button @click="getNextData">默认按钮</el-button>-->
-  <div
+
+  <div id="temp"
     :class="showLoading ? 'loadingCss' :'noLoading'"
     >
    <canvas ref="legendCanvas" width="30" height="130" style="display: none"></canvas>
@@ -44,11 +44,11 @@
                 //   0.9355: "rgb(220,24,32)",
                 //   1: "rgb(180,0,35)",
                 // },
-                onConverUnit: function(data, unit){
-                    if(unit.toLowerCase() == 'k') {
-                      return data - 273.15;
-                    }
-                },
+                // onConverUnit: function(data, unit){
+                //     if(unit.toLowerCase() == 'k') {
+                //       return data - 273.15;
+                //     }else return data;
+                // },
                 onExtremaChange: function(data) {
                   this.updateLegend(data);
                 }.bind(this)
@@ -134,18 +134,31 @@
                   emptyString: '全球风场'
                 },
                 data: this.gribWind,
-                maxVelocity: 0,
+                maxVelocity: 30,
+                lineWidth: 2,
+                velocityScale: 0.002,
                 colorScale: [
                   "rgb(255,255,255)"
-                ]
+                ],
+                onMouseMove: function(angle,speed,unit,postion) {
+                  // console.log('wind=top:'+ postion.y + '°,left:'+ postion.x)
+                  var value = that.heatLayer.getValueAt(postion)
+                  //更新鼠标提示窗口
+                  that.shakeTimer = setTimeout(function(){
+                    that.$store.dispatch('ACTION_WEATHER_TIP', {
+                      text: value + ' ℃',
+                      top: postion.y,
+                      left: postion.x
+                    })
+                  }, 200);
+
+                }
               });
               this.velocityLayer.addTo(this.$Maps);
             },
             getData(hour) {
                 var that = this;
-                // console.log(weatherNameData[this.weatherType], this.playTime, this.weatherParams.height);
                 this.$http.getData(config.services.baseUrl + weatherNameData[this.weatherType] + "/findOneGrib", {refTime: this.playTime, surfaceValue: parseInt(this.weatherParams.height) * 1000}, {}, function (data, msg) {
-                  //  console.log("findOneGrib", data);
                   that.showLoading = false;
                   that.gribData = data
                 })
@@ -160,7 +173,7 @@
               })
             },
             updateLegend: function (data) {
-              console.log("updateLegend- max:" + data.max + ",min:" + data.min)
+              // console.log("updateLegend- max:" + data.max + ",min:" + data.min)
               var legendCtx = this.$refs.legendCanvas.getContext('2d')
               var gradientCfg = data.gradient
               var gradient = legendCtx.createLinearGradient(0, 150, 0, 0)
@@ -176,6 +189,14 @@
                 min: data.min.toFixed(1),       //最小值
                 unit: '℃'      //单位
               })
+            },
+          onMouseMove: function(e) {
+              debugger
+              console.log("onMouseMove:" + e)
+            },
+            test: function() {
+              var bounds = this._map.getBounds();
+              console.log(bounds)
             }
         },
         destroyed: function () {

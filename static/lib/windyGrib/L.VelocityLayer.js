@@ -57,14 +57,16 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
   },
   _startWindy: function() {
     console.log("VelocityLayer_startWindy....");
-    var bounds = this._map.getBounds();
-    var size = this._map.getSize();
+    if(this._windy) {
+      var bounds = this._map.getBounds();
+      var size = this._map.getSize();
+      // bounds, width, height, extent
+      this._windy.start([[0, 0], [size.x, size.y]], size.x, size.y, [
+        [bounds._southWest.lng, bounds._southWest.lat],
+        [bounds._northEast.lng, bounds._northEast.lat]
+      ]);
+    }
 
-    // bounds, width, height, extent
-    this._windy.start([[0, 0], [size.x, size.y]], size.x, size.y, [
-      [bounds._southWest.lng, bounds._southWest.lat],
-      [bounds._northEast.lng, bounds._northEast.lat]
-    ]);
   },
 
   _initWindy: function(self) {

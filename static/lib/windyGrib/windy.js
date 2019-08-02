@@ -131,7 +131,7 @@ var Windy = function(params) {
       _max = 0;
     for (let j = 0; j < nj; j++) {
       var row = [];
-      console.time("运行时间:");
+      // console.time("运行时间:");
       for (let i = 0; i < ni; i++, p++) {
         row[i] = builder.data(p);
         var u = row[i][0];
@@ -147,7 +147,7 @@ var Windy = function(params) {
       }
       grid[j] = row;
     }
-    console.timeEnd("运行时间：" + grid[0][0]);
+    // console.timeEnd("运行时间：" + grid[0][0]);
     callback(
       {
         date: date,
@@ -531,7 +531,7 @@ var Windy = function(params) {
     buildGrid(gridData, function(grid, _min, _max) {
       MIN_VELOCITY_INTENSITY = _min;
       MAX_VELOCITY_INTENSITY = _max;
-      console.log("buildGrid", MIN_VELOCITY_INTENSITY, MAX_VELOCITY_INTENSITY);
+      // console.log("buildGrid", MIN_VELOCITY_INTENSITY, MAX_VELOCITY_INTENSITY);
       // interpolateField
       interpolateField(
         grid,
@@ -552,7 +552,7 @@ var Windy = function(params) {
   };
 
   var sendWindyDefaulData = function() {
-    console.log("sendWindyDefaulColorScale", defaulColorScale);
+    // console.log("sendWindyDefaulColorScale", defaulColorScale);
     return {
       minVelocityIntensity: MIN_VELOCITY_INTENSITY,
       maxVelocityIntensity: MAX_VELOCITY_INTENSITY,
