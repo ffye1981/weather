@@ -311,6 +311,23 @@ const fieldContentData = {
         height: "0"
       }
     ]
+  },
+  10: {
+    type: "Wind_speed_gust",
+    name: "test_heatmap",
+    iconPng: "Wind_speed_gust_unselect.png",
+    iconPngSelect: "Wind_speed_gust_select.png",
+    paramsLabel: "test_heatmap",
+    paramsLabel: {
+      label: "高度",
+      value: "height"
+    },
+    paramsOptions: [
+      {
+        atmosphere: "0",
+        height: "0"
+      }
+    ]
   }
 };
 export default fieldContentData;

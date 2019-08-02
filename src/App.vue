@@ -10,6 +10,8 @@
     <weather-swticher></weather-swticher>
     <!-- <test></test>   -->
     <!-- <test-Point></test-Point> -->
+    <heatmap v-if="weatherType == 10"></heatmap> 
+    <weather-legend v-if="weatherType == 10"></weather-legend>
   </div>
 </template>
 
@@ -23,9 +25,10 @@
   import weatherLegend from './components/common/WeatherLegend';
   import weatherLegendWind from './components/common/weatherLegendWind';
   import weatherSwticher from './components/common/WeatherSwitcher';
-  import test from "./components/common/test"
 
-  import testPoint from "./components/common/marker_with_custom_icons"
+  import test from "./components/common/test";
+  import testPoint from "./components/common/marker_with_custom_icons";
+  import heatmap from "./components/heatmap";
 
   export default {
       name: 'App',
@@ -63,7 +66,8 @@
         weatherLegendWind,
         weatherSwticher,
         // test,
-        // testPoint
+        // testPoint,
+        heatmap
       }
   }
 </script>

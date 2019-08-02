@@ -73,7 +73,7 @@
               if(newVal) {
                 this.$Maps.addLayer(this.lyrGroup);
                 // this.initLayer()
-                this.getData(0, 0)
+                this.getData(0)
               }
           },
           windData: function (newVal, preVal) {
@@ -119,9 +119,8 @@
             // console.log('component mounted')
             // this.getData()
             if(this.loadMapSuccess) {
-               this.getData(0, 0);
+               this.getData(0);
             }
-
         },
         methods: {
             initLayer() {
@@ -156,7 +155,7 @@
               this.velocityLayer.addTo(this.$Maps);
               // console.log("velocityLayer_initLayer", this.velocityLayer._getWindyDefaultData());
             },
-            getData(hour, atmosphereInit) {
+            getData(hour) {
                 // var bounds = this.$Maps.getBounds();
                 // var polygon = Terraformer.WKT.convert({
                 //   "type": "Polygon",
@@ -175,9 +174,7 @@
                   //  console.log("findOneGrib", data);
                   that.showLoading = false;
                   that.windData = data
-                })
-                
-               
+                }) 
             },
             getNextData() {
               var bounds = this.$Maps.getBounds();

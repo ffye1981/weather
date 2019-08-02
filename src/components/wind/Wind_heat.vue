@@ -93,8 +93,9 @@
             // console.log('component created')
         },
         mounted() {
-            // console.log('component mounted')
-            // this.getData()
+             if(this.loadMapSuccess) {
+               this.getData(0);
+            }
 
         },
         methods: {
@@ -132,24 +133,14 @@
               this.velocityLayer.addTo(this.$Maps);
             },
             getData(hour) {
-                // var bounds = this.$Maps.getBounds();
-                // var polygon = Terraformer.WKT.convert({
-                //   "type": "Polygon",
-                //   "coordinates": [
-                //     [ [bounds._northEast.lng, bounds._northEast.lat],
-                //       [bounds._northEast.lng, bounds._southWest.lat],
-                //       [bounds._southWest.lng, bounds._southWest.lat],
-                //       [bounds._southWest.lng, bounds._northEast.lat],
-                //       [bounds._northEast.lng, bounds._northEast.lat] ]
-                //   ]
-                // });
                 var that = this;
                 // this.$http.getData(  weatherNameData[weatherType]   'static/data/gfs.t00z.pgrb2.1p00.f'+hour+'.json',{time: this.playTime}, {}, function (data, msg) {
-                this.$http.getData(config.services.baseUrl + weatherNameData[this.weatherType] + "/findOneGrib", {refTime: this.playTime, surfaceValue: parseInt(this.weatherParams.height) * 1000}, {}, function (data, msg) {
+                // console.log("weatherParams",weatherNameData[this.weatherType],atmosphereInit, this.playTime, this.weatherParams);
+                this.$http.getData(config.services.baseUrl + weatherNameData[this.weatherType] + "/findOneGrib", {refTime: this.playTime, surfaceValue: parseInt(this.weatherParams.atmosphere) * 100}, {}, function (data, msg) {
                   //  console.log("findOneGrib", data);
                   that.showLoading = false;
                   that.windData = data
-                })
+                }) 
             },
             getNextData() {
               var bounds = this.$Maps.getBounds();
@@ -220,24 +211,10 @@
               })
             }
         },
-        // beforeUpdate: function(){
-        //   if(this.velocityLayer) {
-        //       this.velocityLayer.setData(newVal)
-        //       this.heatLayer.setGribData(this.windData);
-        //   }else {
-        //       this.initLayer()
-        //   }
-        // },
-        // updated: function(){
-        //   if(this.velocityLayer) {
-        //       this.velocityLayer.setData(newVal)
-        //       this.heatLayer.setGribData(this.windData);
-        //   }else {
-        //       this.initLayer()
-        //   }
-        // },
         destroyed: function () {
-          // this.velocityLayer._destroyWind()
+          if(this.velocityLayer){
+            this.velocityLayer._destroyWind()
+          }
         },
         components: {}
     }
