@@ -8,7 +8,7 @@
             </div>
             <!-- <transition name="slide-fade" v-if="fieldCell.paramsOptions.length !== 1"> -->
             <transition name="slide-fade" >
-                <div class="fieldCellContent" v-show="currentIndex === index">
+                <div class="fieldCellContent" v-show="currentIndex === index && parseInt(fieldCell.paramsOptions[0].atmosphere) !== 0">
                     {{fieldCell.paramsLabel ? `${fieldCell.paramsLabel.label}:` : ""}}
                     <el-select class="selcetContent" size="small" @change="sendParams" v-model="value" :placeholder="`${Object.values(fieldCell.paramsOptions[0]) ? `${Object.values(fieldCell.paramsOptions[0]).toString()}` : ''}`">
                         <el-option
@@ -65,14 +65,13 @@
             sendParams(){
                 let arrayOptions = this.fieldContent[this.currentIndex].paramsOptions;
                 let selectOption = arrayOptions.find((item,index) => {
+                    // console.log("sendParams_change",  this.value,  Object.values(item).toString());
                    return Object.values(item).toString() == this.value
                 });
                 console.log("sendParams", arrayOptions, this.value, selectOption);
                 this.$store.dispatch('ACTION_WEATHER_OPTION', {
                     weatherParams: selectOption, 
                 });
-                
-
             }
         },
         destroyed: function () {
@@ -92,6 +91,7 @@
     /* text-align: center; */
     font-size: 12px;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .fieldCss {
@@ -134,11 +134,11 @@
     height: 25px;
 }
 .fieldCellContent{
-    color: #fff;
+    color: #409EFF;
     margin: 5px 0;
 }
 .selcetContent{
-    width: 80px;
+    width: 130px;
     border-radius: 15px;
 }
 

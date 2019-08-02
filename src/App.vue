@@ -5,7 +5,8 @@
     <wind v-if="weatherType == 0"></wind>
     <temperature v-if="weatherType == 1"></temperature>
     <weather-tips :params_in="params"></weather-tips>
-    <weather-legend ></weather-legend>
+    <weather-legend-wind  v-if="weatherType == 0"></weather-legend-wind>
+    <weather-legend v-if="weatherType == 1"></weather-legend>
     <weather-swticher></weather-swticher>
     <!-- <test></test>   -->
     <!-- <test-Point></test-Point> -->
@@ -20,6 +21,7 @@
   import temperature from './components/Temperature'
   import weatherTips from './components/common/WeatherTips';
   import weatherLegend from './components/common/WeatherLegend';
+  import weatherLegendWind from './components/common/weatherLegendWind';
   import weatherSwticher from './components/common/WeatherSwitcher';
   import test from "./components/common/test"
 
@@ -58,6 +60,7 @@
         temperature,
         weatherTips,
         weatherLegend,
+        weatherLegendWind,
         weatherSwticher,
         // test,
         // testPoint

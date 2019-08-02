@@ -116,6 +116,7 @@
                     "rgb(255,255,255)"
                   ],
                   onMouseMove: function(angle,speed,unit,postion) {
+                    var value = that.heatLayer.getValueAt(postion)
                       // console.log('wind=top:'+ postion.y + '°,left:'+ postion.x)
                       //更新鼠标提示窗口
                       that.shakeTimer = setTimeout(function(){
