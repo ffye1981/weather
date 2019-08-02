@@ -24,8 +24,8 @@
                 "maxOpacity": .5,
                 "scaleRadius": true,
                 "useLocalExtrema": false,
-                latField: 'lats',
-                lngField: 'lons',
+                latField: 'lat',
+                lngField: 'lon',
                 valueField: 'value',
                 // gradient: {
                 //   0.0645: "rgb(36,104, 180)",
@@ -102,7 +102,7 @@
           },
           gribData: function (newVal, preVal) {
             if(this.heatLayer) {
-              this.heatLayer.setGribData(newVal);
+              this.heatLayer.setData(newVal);
             }else {
               this.initLayer();
             }
@@ -116,13 +116,49 @@
             if(this.loadMapSuccess) {
                this.getData(0);
                this.getWindData(0);
+              var that = this;
+              this.gribData = this.generateRandomData(200);
+              // this.$Maps.on("click", function (e) {
+              //   var value = that.heatLayer.getValueAt(e.layerPoint);
+              //   //更新鼠标提示窗口
+              //   that.shakeTimer = setTimeout(function(){
+              //     that.$store.dispatch('ACTION_WEATHER_TIP', {
+              //       text: value + ' ℃',
+              //       top: e.layerPoint.y,
+              //       left: e.layerPoint.x
+              //     })
+              //   }, 200);
+              // });
             }
         },
         methods: {
+            generateRandomData(len) {
+              // generate some random data
+              var points = [];
+              var max = 0;
+              var min = 1234;
+              var width = 840;
+              var height = 400;
+
+              while (len--) {
+                var val = Math.floor(Math.random()*1234);
+                max = Math.max(max, val);
+                min = Math.min(min, val);
+                var point = {
+                  lon: Math.floor(Math.random()*width),
+                  lat: Math.floor(Math.random()*height),
+                  value: val
+                };
+                points.push(point);
+              }
+
+              var data = { max: max, min:min, data: points };
+              return data;
+            },
             initLayer() {
               this.heatLayer = new HeatmapOverlay(this.heatCfg);
               this.heatLayer.addTo(this.$Maps);
-              this.heatLayer.setGribData(this.gribData);
+              this.heatLayer.setData(this.gribData);
             },
             initWind() {
               var that = this
@@ -137,17 +173,34 @@
                 maxVelocity: 0,
                 colorScale: [
                   "rgb(255,255,255)"
-                ]
+                ],
+                onMouseMove: function(angle,speed,unit,postion) {
+                  if(that.heatLayer) {
+                    var value = that.heatLayer.getValueAt(postion);
+                    //更新鼠标提示窗口
+                    that.shakeTimer = setTimeout(function(){
+                      that.$store.dispatch('ACTION_WEATHER_TIP', {
+                        text: value + ' ℃',
+                        top: postion.y,
+                        left: postion.x
+                      })
+                    }, 200);
+                  }
+                }
               });
               this.velocityLayer.addTo(this.$Maps);
             },
             getData(hour) {
                 var that = this;
                 // console.log(weatherNameData[this.weatherType], this.playTime, this.weatherParams.atmosphere);
-                this.$http.getData(config.services.baseUrl + weatherNameData[this.weatherType] + "/findOneGrib", {refTime: this.playTime, surfaceValue: parseInt(this.weatherParams.atmosphere) * 100}, {}, function (data, msg) {
+                this.$http.getData(config.services.baseUrl + weatherNameData[this.weatherType] + "/listGrids", {refTime: this.playTime, surfaceValue: parseInt(this.weatherParams.atmosphere) * 100}, {}, function (data, msg) {
                   //  console.log("findOneGrib", data);
                   that.showLoading = false;
-                  that.gribData = data
+                  that.gribData = {
+                    max: data.aggregate.max,
+                    min: data.aggregate.min,
+                    data: data.data
+                  }
                 })
             },
             getWindData(hour) {
@@ -160,7 +213,7 @@
               })
             },
             updateLegend: function (data) {
-              console.log("updateLegend- max:" + data.max + ",min:" + data.min)
+              // console.log("updateLegend- max:" + data.max + ",min:" + data.min)
               var legendCtx = this.$refs.legendCanvas.getContext('2d')
               var gradientCfg = data.gradient
               var gradient = legendCtx.createLinearGradient(0, 150, 0, 0)
