@@ -5,8 +5,8 @@
     <wind v-if="weatherType == 0"></wind>
     <temperature v-if="weatherType == 1"></temperature>
     <weather-tips :params_in="params"></weather-tips>
-    <weather-legend ></weather-legend>
     <weather-legend-wind  v-if="weatherType == 0"></weather-legend-wind>
+    <weather-legend v-if="weatherType == 1"></weather-legend>
     <weather-swticher></weather-swticher>
     <!-- <test></test>   -->
     <!-- <test-Point></test-Point> -->

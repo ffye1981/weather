@@ -5,16 +5,11 @@
     appear-to-class="custom-appear-to-class" 
     appear-active-class="custom-appear-active-class" 
    >
-<!-- <transition name="fade" mode="in-out"> -->
-<!-- <transition name="bounce" mode="in-out"> -->
-    <div class="weatherLegendContent">
+    <div class="weatherLegendContent"  v-if="weatherType == 0">
         <p class="unitCss">{{unit}}</p>
         <div class="boxContent">
-
-
-            <!-- textData -->
-            <!-- <p class="maxContent" v-for="(item,itemIndex) in textData " >{{max}}</p> -->
-            <p class="minContent">{{min}}</p>
+            <p class="textContent" v-for="(item,itemIndex) in textData" :key= itemIndex >{{item}}</p>
+            <!-- <p class="minContent">{{min}}</p> -->
         </div>
         <img :src="src" alt="" class="imgSrc">
     </div>
@@ -26,11 +21,6 @@
     export default {
         name: 'WeatherLegend',
         data() {
-
-            // for (var i = 0; i < this.colorScale.length; i++){
-            //     let speendRate = ((this.max - this.min) * (this.colorLength - i - 1) /(this.colorScale.length - 1)).toFixed(1)
-            //     this.textData.push(speendRate);
-            // }
             return {
                 // src: null,
                 // max: 0,
@@ -46,7 +36,8 @@
             src: state => state.weatherLegend.src,
             max: state => state.weatherLegend.max,
             min: state => state.weatherLegend.min,
-            unit: state => state.weatherLegend.unit
+            unit: state => state.weatherLegend.unit,
+            weatherType: state => state.weatherSwitcher.weatherType, 
           }),
         },
         watch: {
@@ -58,7 +49,7 @@
             console.log('component created')
         },
         mounted() {
-            // console.log('mounted_legend',getWindyDefaulColorScale, this.velocityLayer._initWindy, getWindyDefaulColorScale.sendWindyDefaulColorScale(), this.velocityLayer._initWindy.params);
+            console.log('mounted_legend_wind');
         },
         methods: {
             getList() {
@@ -116,6 +107,15 @@
         align-items: center;
         justify-content: center;  
     }
+    .textContent{
+        padding: 0;
+        margin: 0;
+        width: 30px;
+        height: 18px;
+        line-height: 18px;
+        text-align: center;
+        color: #fff 
+    }
     .maxContent {
         padding: 0;
         margin: 0;
@@ -142,11 +142,6 @@
         border-radius: 0px 0px 5px 5px;
     }
 
-/* 
-     appear-class="custom-appear-class"
-    appear-to-class="custom-appear-to-class" 
-    appear-active-class="custom-appear-active-class"  */
-
     .custom-appear-to-class{
         animation: bounce-in 0.3s;
     }
@@ -168,15 +163,11 @@
             transform: scale(0);
         }
         50% {
-            transform: scale(1.5);
+            transform: scale(1.2);
         }
         100% {
             transform: scale(1);
         }
     }
-
-
-
- 
 
 </style>

@@ -85,7 +85,7 @@ var Windy = function(params) {
     var uComp = null,
       vComp = null,
       scalar = null;
-
+    // console.log("createBuilder", data);
     data.forEach(function(record) {
       switch (
         record.header.parameterCategory + "," + record.header.parameterNumber
@@ -146,10 +146,6 @@ var Windy = function(params) {
       }
       grid[j] = row;
     }
-<<<<<<< HEAD
-=======
-    console.timeEnd("运行时间：" + grid[0][0]);
->>>>>>> 772f971d250cbf370943e82a4356ef94bc34451a
     callback(
       {
         date: date,
@@ -420,7 +416,6 @@ var Windy = function(params) {
       MIN_VELOCITY_INTENSITY,
       MAX_VELOCITY_INTENSITY
     );
-    console.log("colorStyles", colorStyles);
     var buckets = colorStyles.map(function() {
       return [];
     });
@@ -479,8 +474,6 @@ var Windy = function(params) {
     g.lineWidth = PARTICLE_LINE_WIDTH;
     g.fillStyle = fadeFillStyle;
 
-    // console.log("fadeFillStyle", fadeFillStyle);
-
     g.globalAlpha = 0.6;
 
     function draw() {
@@ -534,7 +527,7 @@ var Windy = function(params) {
     buildGrid(gridData, function(grid, _min, _max) {
       MIN_VELOCITY_INTENSITY = _min;
       MAX_VELOCITY_INTENSITY = _max;
-      console.log("buildGrid", MIN_VELOCITY_INTENSITY, MAX_VELOCITY_INTENSITY);
+      // console.log("buildGrid", MIN_VELOCITY_INTENSITY, MAX_VELOCITY_INTENSITY);
       // interpolateField
       interpolateField(
         grid,
@@ -555,7 +548,6 @@ var Windy = function(params) {
   };
 
   var sendWindyDefaulData = function() {
-    console.log("sendWindyDefaulColorScale", defaulColorScale);
     return {
       minVelocityIntensity: MIN_VELOCITY_INTENSITY,
       maxVelocityIntensity: MAX_VELOCITY_INTENSITY,

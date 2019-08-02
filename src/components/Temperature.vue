@@ -12,7 +12,7 @@
     import weatherNameData from './constant/weatherNameData.js'
 
     export default {
-        name: 'Wind',
+        name: 'temperature',
         data() {
             return {
               showLoading: false,
@@ -143,8 +143,8 @@
             },
             getData(hour) {
                 var that = this;
-                // console.log(weatherNameData[this.weatherType], this.playTime, this.weatherParams.height);
-                this.$http.getData(config.services.baseUrl + weatherNameData[this.weatherType] + "/findOneGrib", {refTime: this.playTime, surfaceValue: parseInt(this.weatherParams.height) * 1000}, {}, function (data, msg) {
+                // console.log(weatherNameData[this.weatherType], this.playTime, this.weatherParams.atmosphere);
+                this.$http.getData(config.services.baseUrl + weatherNameData[this.weatherType] + "/findOneGrib", {refTime: this.playTime, surfaceValue: parseInt(this.weatherParams.atmosphere) * 100}, {}, function (data, msg) {
                   //  console.log("findOneGrib", data);
                   that.showLoading = false;
                   that.gribData = data
@@ -152,8 +152,8 @@
             },
             getWindData(hour) {
               var that = this;
-              // console.log(weatherNameData[this.weatherType], this.playTime, this.weatherParams.height);
-              this.$http.getData(config.services.baseUrl + weatherNameData[0] + "/findOneGrib", {refTime: this.playTime, surfaceValue: parseInt(this.weatherParams.height) * 1000}, {}, function (data, msg) {
+              // console.log(weatherNameData[this.weatherType], this.playTime, this.weatherParams.atmosphere);
+              this.$http.getData(config.services.baseUrl + weatherNameData[0] + "/findOneGrib", {refTime: this.playTime, surfaceValue: parseInt(this.weatherParams.atmosphere) * 100}, {}, function (data, msg) {
                 //  console.log("findOneGrib", data);
                 that.showLoading = false;
                 that.gribWind = data

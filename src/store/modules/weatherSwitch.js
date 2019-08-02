@@ -9,7 +9,8 @@ import { SET_WEATHER_TYPE, SET_WEATHER_OPTION } from "../mutation-types";
 const state = {
   weatherType: 0, // 0 = 风
   weatherParams: {
-    height: "10km"
+    atmosphere: "100百帕",
+    height: "16000米"
   }
 };
 
