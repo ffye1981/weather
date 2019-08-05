@@ -17,33 +17,48 @@
             return {
               showLoading: false,
               gribData: {},
+          //     gribData: {data:[{"lon":0.0,"lat":90.0,"value":229.99658},
+          //         {"lon":1.0,"lat":90.0,"value":10},
+          //         {"lon":113.0,"lat":37.0,"value":39.99658},
+          //         {"lon":3.0,"lat":90.0,"value":20},
+          //         {"lon":4.0,"lat":1230.0,"value":229.99658},
+          //         {"lon":113.0,"lat":35.0,"value":229.99658},
+          //         {"lon":-6.0,"lat":90.0,"value":229.99658},
+          //         {"lon":47.0,"lat":90.0,"value":50},
+          //         {"lon":8.0,"lat":113.0,"value":229.99658},
+          //         {"lon":55.0,"lat":90.0,"value":229.99658},
+          //         {"lon":10.0,"lat":127.0,"value":229.99658},
+          //         {"lon":113.0,"lat":90.0,"value":229.99658},
+          //         {"lon":12.0,"lat":-90.0,"value":229.99658}],
+          //       // min:10,
+          //       max:229.99658},
               gribWind: {},
               velocityLayer: null,
               heatCfg: {
-                "radius": 2,
-                "maxOpacity": .5,
-                "scaleRadius": true,
-                "useLocalExtrema": false,
+                // radius: 2,
+                maxOpacity: .5,
+                scaleRadius: true,
+                useLocalExtrema: false,
                 latField: 'lat',
                 lngField: 'lon',
                 valueField: 'value',
-                // gradient: {
-                //   0.0645: "rgb(36,104, 180)",
-                //   0.1315: "rgb(60,157, 194)",
-                //   0.1985: "rgb(128,205,193 )",
-                //   0.2655: "rgb(151,218,168 )",
-                //   0.3325: "rgb(198,231,181)",
-                //   0.3995: "rgb(238,247,217)",
-                //   0.4665: "rgb(255,238,159)",
-                //   0.5335: "rgb(252,217,125)",
-                //   0.6005: "rgb(255,182,100)",
-                //   0.6675: "rgb(252,150,75)",
-                //   0.7345: "rgb(250,112,52)",
-                //   0.8015: "rgb(245,64,32)",
-                //   0.8685: "rgb(237,45,28)",
-                //   0.9355: "rgb(220,24,32)",
-                //   1: "rgb(180,0,35)",
-                // },
+                gradient: {
+                  0.0645: "rgb(36,104, 180)",
+                  0.1315: "rgb(60,157, 194)",
+                  0.1985: "rgb(128,205,193 )",
+                  0.2655: "rgb(151,218,168 )",
+                  0.3325: "rgb(198,231,181)",
+                  0.3995: "rgb(238,247,217)",
+                  0.4665: "rgb(255,238,159)",
+                  0.5335: "rgb(252,217,125)",
+                  0.6005: "rgb(255,182,100)",
+                  0.6675: "rgb(252,150,75)",
+                  0.7345: "rgb(250,112,52)",
+                  0.8015: "rgb(245,64,32)",
+                  0.8685: "rgb(237,45,28)",
+                  0.9355: "rgb(220,24,32)",
+                  1: "rgb(180,0,35)",
+                },
                 onConverUnit: function(data, unit){
                     if(unit.toLowerCase() == 'k') {
                       return data - 273.15;
@@ -51,6 +66,17 @@
                 },
                 onExtremaChange: function(data) {
                   this.updateLegend(data);
+                }.bind(this),
+                onMouseMove: function(value,postion) {
+                  var that = this;
+                  //更新鼠标提示窗口
+                  this.shakeTimer = setTimeout(function(){
+                    that.$store.dispatch('ACTION_WEATHER_TIP', {
+                      text: value + ' ℃',
+                      top: postion.y,
+                      left: postion.x
+                    })
+                  }, 200);
                 }.bind(this)
               },
               heatLayer: null,
@@ -102,7 +128,7 @@
           },
           gribData: function (newVal, preVal) {
             if(this.heatLayer) {
-              this.heatLayer.setData(newVal);
+              this.heatLayer.setGribData(newVal);
             }else {
               this.initLayer();
             }
@@ -112,53 +138,17 @@
             // console.log('component created')
         },
         mounted() {
-            console.log('temperature- mounted' + this.weatherType)
+            // console.log('temperature- mounted' + this.weatherType)
             if(this.loadMapSuccess) {
                this.getData(0);
                this.getWindData(0);
-              var that = this;
-              this.gribData = this.generateRandomData(200);
-              // this.$Maps.on("click", function (e) {
-              //   var value = that.heatLayer.getValueAt(e.layerPoint);
-              //   //更新鼠标提示窗口
-              //   that.shakeTimer = setTimeout(function(){
-              //     that.$store.dispatch('ACTION_WEATHER_TIP', {
-              //       text: value + ' ℃',
-              //       top: e.layerPoint.y,
-              //       left: e.layerPoint.x
-              //     })
-              //   }, 200);
-              // });
             }
         },
         methods: {
-            generateRandomData(len) {
-              // generate some random data
-              var points = [];
-              var max = 0;
-              var min = 1234;
-              var width = 840;
-              var height = 400;
-
-              while (len--) {
-                var val = Math.floor(Math.random()*1234);
-                max = Math.max(max, val);
-                min = Math.min(min, val);
-                var point = {
-                  lon: Math.floor(Math.random()*width),
-                  lat: Math.floor(Math.random()*height),
-                  value: val
-                };
-                points.push(point);
-              }
-
-              var data = { max: max, min:min, data: points };
-              return data;
-            },
             initLayer() {
               this.heatLayer = new HeatmapOverlay(this.heatCfg);
               this.heatLayer.addTo(this.$Maps);
-              this.heatLayer.setData(this.gribData);
+              this.heatLayer.setGribData(this.gribData);
             },
             initWind() {
               var that = this
@@ -173,34 +163,22 @@
                 maxVelocity: 0,
                 colorScale: [
                   "rgb(255,255,255)"
-                ],
-                onMouseMove: function(angle,speed,unit,postion) {
-                  if(that.heatLayer) {
-                    var value = that.heatLayer.getValueAt(postion);
-                    //更新鼠标提示窗口
-                    that.shakeTimer = setTimeout(function(){
-                      that.$store.dispatch('ACTION_WEATHER_TIP', {
-                        text: value + ' ℃',
-                        top: postion.y,
-                        left: postion.x
-                      })
-                    }, 200);
-                  }
-                }
+                ]
               });
               this.velocityLayer.addTo(this.$Maps);
             },
             getData(hour) {
                 var that = this;
                 // console.log(weatherNameData[this.weatherType], this.playTime, this.weatherParams.atmosphere);
-                this.$http.getData(config.services.baseUrl + weatherNameData[this.weatherType] + "/listGrids", {refTime: this.playTime, surfaceValue: parseInt(this.weatherParams.atmosphere) * 100}, {}, function (data, msg) {
+                this.$http.getData(config.services.baseUrl + weatherNameData[this.weatherType] + "/findOneGrib", {refTime: this.playTime, surfaceValue: parseInt(this.weatherParams.atmosphere) * 100}, {}, function (data, msg) {
                   //  console.log("findOneGrib", data);
-                  that.showLoading = false;
-                  that.gribData = {
-                    max: data.aggregate.max,
-                    min: data.aggregate.min,
-                    data: data.data
-                  }
+                  that.showLoading = true;
+                  that.gribData = data;
+                  // that.gribData = {
+                  //   max: data.aggregate.max,
+                  //   min: data.aggregate.min,
+                  //   data: data.data
+                  // }
                 })
             },
             getWindData(hour) {
