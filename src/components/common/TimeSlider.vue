@@ -31,7 +31,7 @@
         name: 'TimeSlider',
         data() {
             return {
-                dateValue:"",
+                dateValue: new Date(),
                 autoPlay: true,
                 value: 0,
                 index: 0,
@@ -119,7 +119,6 @@
                 this.timer = setInterval(() => {
                   that.calValue('add')
                 }, 20000)
-
             },
             stop() {
               clearInterval(this.timer)
@@ -145,10 +144,15 @@
               this.change(this.value);
             },
             change(val) {
-              var date = new Date();
+              // // var date = new Date();
+              // if(){
+
+              // }
+              var date = this.dateValue;
               var year = date.getFullYear().toString();
               var month =date.getMonth() + 1;
               var day = date.getDate();
+              console.log("dateValue", date, year, month, day );
               var dateStr = year + '-' + (month < 10 ? '0' + month.toString() : month.toString()) + '-' + (day < 10 ? '0' + day : day) + ' ' + (val < 10 ? '0'+ val: val) + ':00:00'
               // console.log('val change:' + dateStr)
               this.$store.dispatch('ACTION_PLAY_TIME', dateStr)
@@ -168,7 +172,7 @@
   
   .el-slider {
     width: calc(100% - 130px);
-    margin:  0 20px;
+    margin:  0 20px 0 10px;
     /* position: absolute;
     left: 50px;
     bottom: 30px; */
@@ -182,14 +186,22 @@
     bottom: 50px;
   }
   .dateBlock{
-    width: 135px;
+    width: 120px;
+    margin: 0 10px;
   }
   .el-date-editor>>>.el-input, .el-date-editor>>>.el-input__inner{
-    width: 135px;
+    width: 120px;
   }
   .el-date-editor .el-input, .el-date-editor .el-input__inner{
     width: 135px;
   }
+  .el-input--prefix>>>.el-input__inner {
+    padding-left: 30px;
+}
+
+.el-input--suffix>>>.el-input__inner {
+    padding-right: 10px;
+}
   .el-input__prefix{
     left: 0px;
   }

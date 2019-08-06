@@ -59,7 +59,7 @@
               // console.log('weatherParams改变之前的值：' + preVal + '；改变之后的值：' + newVal)
               var hour = new Date(Date.parse(this.playTime.replace(/-/g, "/"))).getHours();
               if(this.velocityLayer) {
-                if(newVal.length){
+                if(newVal && newVal.length){
                   this.velocityLayer.setData(newVal);
                 }
                 this.showLoading = true;

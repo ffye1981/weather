@@ -59,7 +59,13 @@
                     this.value = null;   // type切换后，每次清理数据以防旧数据干扰
                     this.$store.dispatch('ACTION_WEATHER_TYPE', {
                         weatherType: this.currentIndex,
-                    })
+                    });
+                    this.$store.dispatch('ACTION_WEATHER_OPTION', {
+                        weatherParams:{
+                            atmosphere: "1000百帕",
+                            height: "0米"
+                        } 
+                    });
                 }
             },
             sendParams(){
