@@ -7,6 +7,8 @@
     <el-date-picker
       v-model="dateValue"
       type="date"
+      :picker-options="pickerOptions"
+      @change="changeDate"
       placeholder="选择日期">
     </el-date-picker>
   </div>
@@ -31,6 +33,13 @@
         name: 'TimeSlider',
         data() {
             return {
+                pickerOptions: {
+                  disabledDate(time) {
+                    // 选择一周的时间
+                    return time.getTime() < Date.now() - 8.64e7 || time.getTime() > Date.now() + 6.048e8;
+                    // 5.184e8
+                  }
+                },  
                 dateValue: new Date(),
                 autoPlay: true,
                 value: 0,
@@ -100,6 +109,7 @@
         },
         mounted() {
             console.log('component mounted')
+            this.index = Math.ceil(new Date().getHours()/3);
             this.calValue()
             this.changeAutoPlay()
         },
@@ -143,16 +153,16 @@
               this.value = parseInt(Object.keys(this.marks)[this.index])
               this.change(this.value);
             },
+            changeDate(valueDate){
+              this.dateValue = valueDate;
+              this.change(this.value);
+            },
             change(val) {
-              // // var date = new Date();
-              // if(){
-
-              // }
               var date = this.dateValue;
               var year = date.getFullYear().toString();
               var month =date.getMonth() + 1;
               var day = date.getDate();
-              console.log("dateValue", date, year, month, day );
+              // console.log("dateValue", date, year, month, day );
               var dateStr = year + '-' + (month < 10 ? '0' + month.toString() : month.toString()) + '-' + (day < 10 ? '0' + day : day) + ' ' + (val < 10 ? '0'+ val: val) + ':00:00'
               // console.log('val change:' + dateStr)
               this.$store.dispatch('ACTION_PLAY_TIME', dateStr)

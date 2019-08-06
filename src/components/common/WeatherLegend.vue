@@ -100,6 +100,7 @@
         position: relative;
     }
     .maxContent {
+        width: 100%;
         padding: 0;
         margin: 0;
         position: absolute;
@@ -112,6 +113,7 @@
         color: #fff
     }
     .minContent {
+        width: 100%;
         padding: 0;
         margin: 0;
         position: absolute;
