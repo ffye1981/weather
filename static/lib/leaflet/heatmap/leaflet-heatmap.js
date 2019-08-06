@@ -42,6 +42,7 @@
       this._max = 1;
       this._min = 0;
       this.cfg.container = this._el;
+      // this.lyrGroup = L.layerGroup([])
     },
 
     onAdd: function (map) {
@@ -68,6 +69,7 @@
       // the zoom changed or the map has been moved
       map.on('moveend', this._reset, this);
       map.on('mousemove', this._onMouseMove, this);
+      // map.addLayer(this.lyrGroup);
       this._draw();
     },
 
@@ -113,11 +115,11 @@
 
       var latLngPoints = [];
       var radiusMultiplier = this.cfg.scaleRadius ? scale : 1;
-      var localMax = 0;
-      var localMin = 0;
       var valueField = this.cfg.valueField;
       var len = this._data.length;
-    
+      var localMax = Number.MIN_VALUE;
+      var localMin = Number.MAX_VALUE;
+      // this.lyrGroup.clearLayers();
       while (len--) {
         var entry = this._data[len];
         var value = entry[valueField];
@@ -145,13 +147,16 @@
         }
         latlngPoint.radius = radius;
         latLngPoints.push(latlngPoint);
+        // this._drawPoint(latlng,value)
       }
-      if (this.cfg.useLocalExtrema) {
-        generatedData.max = localMax;
-        generatedData.min = localMin;
-      }
+      // if (this.cfg.useLocalExtrema) {
+        this._max = generatedData.max = localMax;
+        this._min = generatedData.min = localMin;
+      // }
       generatedData.data = latLngPoints;
-      this._heatmap.setData(generatedData);
+      if(generatedData.data.length > 0) {
+        this._heatmap.setData(generatedData);
+      }
     },
     setData: function(data) {
       this._max = data.max || this._max;
@@ -194,14 +199,8 @@
           var speed = 0;
           var _onConverUnit = this.cfg.onConverUnit || this._onConverUnit;
           var value = _onConverUnit(uvArr, header.parameterUnit);
-          // if(uvArr.length > 1) {
-          //   speed = Math.sqrt(Math.pow(uvArr[0],2) + Math.pow(uvArr[1],2))
-          // }else {
-          //   speed = uvArr[0];
-          // }
           max = Math.max(max,value);
           min = Math.min(min,value);
-
           var lon = header.lo1 + i * Δλ;
           var lat = header.la1 + j * Δφ;
           var latlng = new L.LatLng(lat, lon);
@@ -215,52 +214,12 @@
       this._data = d;
       this._draw();
     },
-    // setGribData: function(data){
-    //   var builder = this._createBuilder(data);
-    //   var header = builder.header;
-    //
-    //   var Δλ = header.lo2> header.lo1? header.dx: -header.dx;
-    //   var Δφ = header.la2> header.la1? header.dy: -header.dy;    // distance between grid points (e.g., 2.5 deg lon, 2.5 deg lat)
-    //
-    //   var grid = [];
-    //   var max = -10000000000,min = 10000000000,p = 0;
-    //   var uvArr;
-    //   for (var j = 0; j < header.ny; j++) {
-    //     for (var i = 0; i < header.nx; i++, p++) {
-    //       uvArr = builder.data(p);
-    //       var speed = 0;
-    //       var _onConverUnit = this.cfg.onConverUnit || this._onConverUnit;
-    //       var value = _onConverUnit(uvArr, header.parameterUnit);
-    //       // if(uvArr.length > 1) {
-    //       //   speed = Math.sqrt(Math.pow(uvArr[0],2) + Math.pow(uvArr[1],2))
-    //       // }else {
-    //       //   speed = uvArr[0];
-    //       // }
-    //       max = Math.max(max,value);
-    //       min = Math.min(min,value);
-    //       grid.push({
-    //         "lats": header.la1 + j * Δφ,
-    //         "lons": header.lo1 + i * Δλ,
-    //         "value": value
-    //       });
-    //     }
-    //   }
-    //   // console.log("setGribData- max:" + max + ",min:" + min)
-    //   this.setData({
-    //     max: max,
-    //     min: min,
-    //     data: grid
-    //   })
-    // },
     getValueAt: function (post) {
       var value = this._heatmap.getValueAt(post);
-      if(this.cfg.useLocalExtrema) {
-        return value;
-      }
-      if(this._min != 0 && value !=0) {
-        value = (this._min + value).toFixed(1);
-      }
-      return value
+      // if(this.cfg.useLocalExtrema) {
+      //   return value;
+      // }
+      return (this._min + value).toFixed(1)
     },
     addData: function(pointOrArray) {
       if (pointOrArray.length > 0) {
@@ -350,6 +309,19 @@
       if(this.cfg.onMouseMove) {
         this.cfg.onMouseMove(this.getValueAt(e.containerPoint),e.containerPoint);
       }
+    },
+    _drawPoint: function (latlng,value){
+    // ///自定义一个maker
+    // const greenIcon = L.icon({
+    //   iconUrl: 'static/images/Gps_Device_16.png',
+    //   iconSize: [16,16], // size of the icon
+    //   popupAnchor: [0, -10] // point from which the popup should open relative to the iconAnchor
+    // });
+
+    const oMarker = L.circle(latlng, {radius: 5000});
+    // 绑定一个提示标签
+    oMarker.bindTooltip('<p>'+value+'</p>', { direction: 'left', offset: [0, 0] }).openTooltip();
+    this.lyrGroup.addLayer(oMarker);
     }
   });
 

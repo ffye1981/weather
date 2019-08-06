@@ -38,7 +38,7 @@
                 // radius: 2,
                 maxOpacity: .5,
                 scaleRadius: true,
-                useLocalExtrema: false,
+                useLocalExtrema: true,
                 latField: 'lat',
                 lngField: 'lon',
                 valueField: 'value',
