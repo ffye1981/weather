@@ -67,6 +67,7 @@
       // this resets the origin and redraws whenever
       // the zoom changed or the map has been moved
       map.on('moveend', this._reset, this);
+      map.on('mousemove', this._onMouseMove, this);
       this._draw();
     },
 
@@ -78,8 +79,8 @@
     onRemove: function (map) {
       // remove layer's DOM elements and listeners
       map.getPanes().overlayPane.removeChild(this._el);
-
       map.off('moveend', this._reset, this);
+      map.off('mousemove', this._onMouseMove, this);
     },
     _draw: function() {
       if (!this._map) { return; }
@@ -149,9 +150,7 @@
         generatedData.max = localMax;
         generatedData.min = localMin;
       }
-
       generatedData.data = latLngPoints;
-
       this._heatmap.setData(generatedData);
     },
     setData: function(data) {
@@ -181,13 +180,12 @@
       this._draw();
     },
     setGribData: function(data){
+      var valueField = this.cfg.valueField || 'value';
       var builder = this._createBuilder(data);
       var header = builder.header;
-
       var Δλ = header.lo2> header.lo1? header.dx: -header.dx;
       var Δφ = header.la2> header.la1? header.dy: -header.dy;    // distance between grid points (e.g., 2.5 deg lon, 2.5 deg lat)
-
-      var grid = [];
+      var d = [];
       var max = -10000000000,min = 10000000000,p = 0;
       var uvArr;
       for (var j = 0; j < header.ny; j++) {
@@ -203,22 +201,66 @@
           // }
           max = Math.max(max,value);
           min = Math.min(min,value);
-          grid.push({
-            "lats": header.la1 + j * Δφ,
-            "lons": header.lo1 + i * Δλ,
-            "value": value
-          });
+
+          var lon = header.lo1 + i * Δλ;
+          var lat = header.la1 + j * Δφ;
+          var latlng = new L.LatLng(lat, lon);
+          var dataObj = { latlng: latlng };
+          dataObj[valueField] = value;
+          d.push(dataObj);
         }
       }
-      // console.log("setGribData- max:" + max + ",min:" + min)
-      this.setData({
-        max: max,
-        min: min,
-        data: grid
-      })
+      this._max = max;
+      this._min = min;
+      this._data = d;
+      this._draw();
     },
+    // setGribData: function(data){
+    //   var builder = this._createBuilder(data);
+    //   var header = builder.header;
+    //
+    //   var Δλ = header.lo2> header.lo1? header.dx: -header.dx;
+    //   var Δφ = header.la2> header.la1? header.dy: -header.dy;    // distance between grid points (e.g., 2.5 deg lon, 2.5 deg lat)
+    //
+    //   var grid = [];
+    //   var max = -10000000000,min = 10000000000,p = 0;
+    //   var uvArr;
+    //   for (var j = 0; j < header.ny; j++) {
+    //     for (var i = 0; i < header.nx; i++, p++) {
+    //       uvArr = builder.data(p);
+    //       var speed = 0;
+    //       var _onConverUnit = this.cfg.onConverUnit || this._onConverUnit;
+    //       var value = _onConverUnit(uvArr, header.parameterUnit);
+    //       // if(uvArr.length > 1) {
+    //       //   speed = Math.sqrt(Math.pow(uvArr[0],2) + Math.pow(uvArr[1],2))
+    //       // }else {
+    //       //   speed = uvArr[0];
+    //       // }
+    //       max = Math.max(max,value);
+    //       min = Math.min(min,value);
+    //       grid.push({
+    //         "lats": header.la1 + j * Δφ,
+    //         "lons": header.lo1 + i * Δλ,
+    //         "value": value
+    //       });
+    //     }
+    //   }
+    //   // console.log("setGribData- max:" + max + ",min:" + min)
+    //   this.setData({
+    //     max: max,
+    //     min: min,
+    //     data: grid
+    //   })
+    // },
     getValueAt: function (post) {
-      return this._heatmap.getValueAt(post)
+      var value = this._heatmap.getValueAt(post);
+      if(this.cfg.useLocalExtrema) {
+        return value;
+      }
+      if(this._min != 0 && value !=0) {
+        value = (this._min + value).toFixed(1);
+      }
+      return value
     },
     addData: function(pointOrArray) {
       if (pointOrArray.length > 0) {
@@ -303,6 +345,11 @@
     },
     _onConverUnit: function(data, unit) {
       return data;
+    },
+    _onMouseMove: function (e) {
+      if(this.cfg.onMouseMove) {
+        this.cfg.onMouseMove(this.getValueAt(e.containerPoint),e.containerPoint);
+      }
     }
   });
 
