@@ -33,7 +33,7 @@
         },
         watch: {
           playTime: function (newVal, preVal) {
-              // console.log('playTime改变之前的值：' + preVal + '；改变之后的值：' + newVal)
+              console.log('playTime改变之前的值：' + preVal + '；改变之后的值：' + newVal)
               var hour = new Date(Date.parse(newVal.replace(/-/g, "/"))).getHours();
               if(this.velocityLayer) {
                 this.showLoading = true;
@@ -59,11 +59,13 @@
               // console.log('weatherParams改变之前的值：' + preVal + '；改变之后的值：' + newVal)
               var hour = new Date(Date.parse(this.playTime.replace(/-/g, "/"))).getHours();
               if(this.velocityLayer) {
-                this.velocityLayer.setData(newVal);
+                if(newVal.length){
+                  this.velocityLayer.setData(newVal);
+                }
                 this.showLoading = true;
                 this.getData(hour)
                 let legendData = this.velocityLayer._getWindyDefaultData();
-                this.updateLegend(legendData);
+                this.updateLegend(legendData); 
               }else{
                 this.initLayer();
               }
@@ -77,12 +79,15 @@
               }
           },
           windData: function (newVal, preVal) {
+              // console.log('windData改变之前的值：' + preVal + '；改变之后的值：' + newVal)
               if(this.velocityLayer) {
-                  this.velocityLayer.setData(newVal);
-                  // console.log("velocityLayer_newVal", this.velocityLayer._getWindyDefaultData());
+                  // if(newVal.length){
+                    this.velocityLayer.setData(newVal);
+                    let legendData = this.velocityLayer._getWindyDefaultData();
+                    this.updateLegend(legendData);
+                  // }
+                  // console.log("velocityLayer_newVal", newVal, this.velocityLayer._getWindyDefaultData());
                   // this.heatLayer.setGribData(this.windData);
-                  let legendData = this.velocityLayer._getWindyDefaultData();
-                  this.updateLegend(legendData);
               }else {
                   this.initLayer();
                   let defaulColorScale = [

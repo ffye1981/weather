@@ -10,12 +10,12 @@
             <transition name="slide-fade" >
                 <div class="fieldCellContent" v-show="currentIndex === index && parseInt(fieldCell.paramsOptions[0].atmosphere) !== 0">
                     {{fieldCell.paramsLabel ? `${fieldCell.paramsLabel.label}:` : ""}}
-                    <el-select class="selcetContent" size="small" @change="sendParams" v-model="value" :placeholder="`${Object.values(fieldCell.paramsOptions[0]) ? `${Object.values(fieldCell.paramsOptions[0]).toString()}` : ''}`">
+                    <el-select class="selcetContent" size="small" @change="sendParams" v-model="value" :placeholder="`${Object.values(fieldCell.paramsOptions[0]) ? `${Object.values(fieldCell.paramsOptions[0]).toString().replace(/,/g,'，')}` : ''}`">
                         <el-option
                             v-for="(item,itemIndex) in fieldCell.paramsOptions"
                             :key="itemIndex"
-                            :label="`${Object.values(item) ? `${Object.values(item).toString()}` : ''}`"
-                            :value="`${Object.values(item) ? `${Object.values(item).toString()}` : ''}`">
+                            :label="`${Object.values(item) ? `${Object.values(item).toString().replace(/,/g,'，')}` : ''}`"
+                            :value="`${Object.values(item) ? `${Object.values(item).toString().replace(/,/g,'，')}` : ''}`">
                         </el-option>
                     </el-select>
                 </div>
@@ -66,7 +66,7 @@
                 let arrayOptions = this.fieldContent[this.currentIndex].paramsOptions;
                 let selectOption = arrayOptions.find((item,index) => {
                     // console.log("sendParams_change",  this.value,  Object.values(item).toString());
-                   return Object.values(item).toString() == this.value
+                   return Object.values(item).toString().replace(/,/g,'，') == this.value
                 });
                 console.log("sendParams", arrayOptions, this.value, selectOption);
                 this.$store.dispatch('ACTION_WEATHER_OPTION', {
@@ -138,7 +138,7 @@
     margin: 5px 0;
 }
 .selcetContent{
-    width: 130px;
+    width: 150px;
     border-radius: 15px;
 }
 
