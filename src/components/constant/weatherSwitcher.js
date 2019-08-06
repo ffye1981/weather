@@ -14,27 +14,27 @@ const fieldContentData = {
         height: "0米"
       },
       {
-        atmosphere: "850百帕",
+        atmosphere: "850  百帕",
         height: "1500米"
       },
       {
-        atmosphere: "700百帕",
+        atmosphere: "700  百帕",
         height: "3000米"
       },
       {
-        atmosphere: "500百帕",
+        atmosphere: "500  百帕",
         height: "5500米"
       },
       {
-        atmosphere: "300百帕",
+        atmosphere: "300  百帕",
         height: "9200米"
       },
       {
-        atmosphere: "200百帕",
+        atmosphere: "200  百帕",
         height: "12000米"
       },
       {
-        atmosphere: "100百帕",
+        atmosphere: "100  百帕",
         height: "16000米"
       }
     ]
@@ -55,27 +55,27 @@ const fieldContentData = {
         height: "0米"
       },
       {
-        atmosphere: "850百帕",
+        atmosphere: "850  百帕",
         height: "1500米"
       },
       {
-        atmosphere: "700百帕",
+        atmosphere: "700  百帕",
         height: "3000米"
       },
       {
-        atmosphere: "500百帕",
+        atmosphere: "500  百帕",
         height: "5500米"
       },
       {
-        atmosphere: "300百帕",
+        atmosphere: "300  百帕",
         height: "9200米"
       },
       {
-        atmosphere: "200百帕",
+        atmosphere: "200  百帕",
         height: "12000米"
       },
       {
-        atmosphere: "100百帕",
+        atmosphere: "100  百帕",
         height: "16000米"
       }
     ]
@@ -96,27 +96,27 @@ const fieldContentData = {
         height: "0米"
       },
       {
-        atmosphere: "850百帕",
+        atmosphere: "850  百帕",
         height: "1500米"
       },
       {
-        atmosphere: "700百帕",
+        atmosphere: "700  百帕",
         height: "3000米"
       },
       {
-        atmosphere: "500百帕",
+        atmosphere: "500  百帕",
         height: "5500米"
       },
       {
-        atmosphere: "300百帕",
+        atmosphere: "300  百帕",
         height: "9200米"
       },
       {
-        atmosphere: "200百帕",
+        atmosphere: "200  百帕",
         height: "12000米"
       },
       {
-        atmosphere: "100百帕",
+        atmosphere: "100  百帕",
         height: "16000米"
       }
     ]
@@ -137,27 +137,27 @@ const fieldContentData = {
         height: "0米"
       },
       {
-        atmosphere: "850百帕",
+        atmosphere: "850  百帕",
         height: "1500米"
       },
       {
-        atmosphere: "700百帕",
+        atmosphere: "700  百帕",
         height: "3000米"
       },
       {
-        atmosphere: "500百帕",
+        atmosphere: "500  百帕",
         height: "5500米"
       },
       {
-        atmosphere: "300百帕",
+        atmosphere: "300  百帕",
         height: "9200米"
       },
       {
-        atmosphere: "200百帕",
+        atmosphere: "200  百帕",
         height: "12000米"
       },
       {
-        atmosphere: "100百帕",
+        atmosphere: "100  百帕",
         height: "16000米"
       }
     ]
@@ -195,27 +195,27 @@ const fieldContentData = {
         height: "0米"
       },
       {
-        atmosphere: "850百帕",
+        atmosphere: "850  百帕",
         height: "1500米"
       },
       {
-        atmosphere: "700百帕",
+        atmosphere: "700  百帕",
         height: "3000米"
       },
       {
-        atmosphere: "500百帕",
+        atmosphere: "500  百帕",
         height: "5500米"
       },
       {
-        atmosphere: "300百帕",
+        atmosphere: "300  百帕",
         height: "9200米"
       },
       {
-        atmosphere: "200百帕",
+        atmosphere: "200  百帕",
         height: "12000米"
       },
       {
-        atmosphere: "100百帕",
+        atmosphere: "100  百帕",
         height: "16000米"
       }
     ]
@@ -236,27 +236,27 @@ const fieldContentData = {
         height: "0米"
       },
       {
-        atmosphere: "850百帕",
+        atmosphere: "850  百帕",
         height: "1500米"
       },
       {
-        atmosphere: "700百帕",
+        atmosphere: "700  百帕",
         height: "3000米"
       },
       {
-        atmosphere: "500百帕",
+        atmosphere: "500  百帕",
         height: "5500米"
       },
       {
-        atmosphere: "300百帕",
+        atmosphere: "300   百帕",
         height: "9200米"
       },
       {
-        atmosphere: "200百帕",
+        atmosphere: "200   百帕",
         height: "12000米"
       },
       {
-        atmosphere: "100百帕",
+        atmosphere: "100   百帕",
         height: "16000米"
       }
     ]
@@ -311,23 +311,23 @@ const fieldContentData = {
         height: "0"
       }
     ]
-  },
-  10: {
-    type: "Wind_speed_gust",
-    name: "test_heatmap",
-    iconPng: "Wind_speed_gust_unselect.png",
-    iconPngSelect: "Wind_speed_gust_select.png",
-    paramsLabel: "test_heatmap",
-    paramsLabel: {
-      label: "高度",
-      value: "height"
-    },
-    paramsOptions: [
-      {
-        atmosphere: "0",
-        height: "0"
-      }
-    ]
   }
+  // 10: {
+  //   type: "Wind_speed_gust",
+  //   name: "test_heatmap",
+  //   iconPng: "Wind_speed_gust_unselect.png",
+  //   iconPngSelect: "Wind_speed_gust_select.png",
+  //   paramsLabel: "test_heatmap",
+  //   paramsLabel: {
+  //     label: "高度",
+  //     value: "height"
+  //   },
+  //   paramsOptions: [
+  //     {
+  //       atmosphere: "0",
+  //       height: "0"
+  //     }
+  //   ]
+  // }
 };
 export default fieldContentData;

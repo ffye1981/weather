@@ -3,6 +3,13 @@
   <!-- <el-button type="text" icon="el-icon-video-pause"  @click="getNextData" ></el-button> -->
   <el-button :icon= "autoPlay === true ? 'el-icon-video-pause' : 'el-icon-video-play'" circle @click="changeAutoPlay"></el-button>
   <el-button icon="el-icon-d-arrow-left" circle @click="calValue('reduce')"></el-button>
+  <div class="dateBlock">
+    <el-date-picker
+      v-model="dateValue"
+      type="date"
+      placeholder="选择日期">
+    </el-date-picker>
+  </div>
   <el-slider
     :min="0"
     :max="21"
@@ -24,6 +31,7 @@
         name: 'TimeSlider',
         data() {
             return {
+                dateValue:"",
                 autoPlay: true,
                 value: 0,
                 index: 0,
@@ -157,6 +165,7 @@
 </script>
 
 <style scoped>
+  
   .el-slider {
     width: calc(100% - 130px);
     margin:  0 20px;
@@ -172,7 +181,18 @@
     left:185px;
     bottom: 50px;
   }
-
+  .dateBlock{
+    width: 135px;
+  }
+  .el-date-editor>>>.el-input, .el-date-editor>>>.el-input__inner{
+    width: 135px;
+  }
+  .el-date-editor .el-input, .el-date-editor .el-input__inner{
+    width: 135px;
+  }
+  .el-input__prefix{
+    left: 0px;
+  }
   .el-button {
     padding: 1px 6px;
     font-size: 22px;
