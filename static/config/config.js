@@ -1,9 +1,9 @@
 var config = {
   mapConfig: {
     view: {
-      center: [39.966493, 116.332979],
+      center: [35.601219, 108.906584],
       projection: "EPSG:4326",
-      zoom: 5
+      zoom: 7
     },
     baseLayer: {
       url:

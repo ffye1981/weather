@@ -117,8 +117,8 @@
       var radiusMultiplier = this.cfg.scaleRadius ? scale : 1;
       var valueField = this.cfg.valueField;
       var len = this._data.length;
-      var localMax = Number.MIN_VALUE;
-      var localMin = Number.MAX_VALUE;
+      var localMax = -10000000000;
+      var localMin = 10000000000;
       // this.lyrGroup.clearLayers();
       while (len--) {
         var entry = this._data[len];
@@ -219,7 +219,12 @@
       // if(this.cfg.useLocalExtrema) {
       //   return value;
       // }
-      return (this._min + value).toFixed(1)
+      //10000000000 是_min的基准值，说明当前视窗范围无数据了。
+      if(this._min != 10000000000) {
+        value = (this._min + value).toFixed(1)
+      }
+      console.log(value)
+      return value;
     },
     addData: function(pointOrArray) {
       if (pointOrArray.length > 0) {
