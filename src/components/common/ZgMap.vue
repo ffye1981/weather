@@ -112,7 +112,7 @@
                   layers: [normalm4],
                   zoomControl: false
                 }).setView(config.mapConfig.view.center,config.mapConfig.view.zoom);
-                // this.map.setMaxBounds();
+                this.map.setMaxBounds([[79,-0],[-79,359]]);
                 this.map.on('zoomend',function (e) {
                   // console.log('zoomend - zoom：'+ e.target.getZoom())
                 })

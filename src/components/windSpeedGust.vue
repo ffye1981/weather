@@ -35,7 +35,7 @@ s <template>
               gribWind: {},
               velocityLayer: null,
               heatCfg: {
-                // radius: 2,
+                radius: 1.5,
                 maxOpacity: .5,
                 scaleRadius: true,
                 useLocalExtrema: false,

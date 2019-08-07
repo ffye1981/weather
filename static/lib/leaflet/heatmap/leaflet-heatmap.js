@@ -42,7 +42,7 @@
       this._max = 1;
       this._min = 0;
       this.cfg.container = this._el;
-      // this.lyrGroup = L.layerGroup([])
+      this.lyrGroup = L.layerGroup([])
     },
 
     onAdd: function (map) {
@@ -69,7 +69,7 @@
       // the zoom changed or the map has been moved
       map.on('moveend', this._reset, this);
       map.on('mousemove', this._onMouseMove, this);
-      // map.addLayer(this.lyrGroup);
+      map.addLayer(this.lyrGroup);
       this._draw();
     },
 
@@ -223,7 +223,7 @@
       if(this._min != 10000000000) {
         value = (this._min + value).toFixed(1)
       }
-      console.log(value)
+      // console.log(value)
       return value;
     },
     addData: function(pointOrArray) {
@@ -325,7 +325,7 @@
 
     const oMarker = L.circle(latlng, {radius: 5000});
     // 绑定一个提示标签
-    oMarker.bindTooltip('<p>'+value+'</p>', { direction: 'left', offset: [0, 0] }).openTooltip();
+    oMarker.bindTooltip('<p>'+latlng+'</p>', { direction: 'left', offset: [0, 0] }).openTooltip();
     this.lyrGroup.addLayer(oMarker);
     }
   });
