@@ -39,6 +39,7 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
   setData: function setData(windData) {
     // this.options.data = windData;
     this._windy.setData(windData);
+    this._windy.setMaxMin();
     this._clearWind();
     this._startWindyShake();
   },
@@ -57,7 +58,7 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
   },
   _startWindy: function() {
     // console.log("VelocityLayer_startWindy....");
-    if(this._windy) {
+    if (this._windy) {
       var bounds = this._map.getBounds();
       var size = this._map.getSize();
       // bounds, width, height, extent
@@ -75,6 +76,7 @@ L.VelocityLayer = (L.Layer ? L.Layer : L.Class).extend({
       self.options
     );
     this._windy = new Windy(options);
+    this._windy.setMaxMin();
     // 怎么取到Windy构造函数里面的默认值
     // prepare context global var, start drawing
     this._context = this._canvasLayer._canvas.getContext("2d");

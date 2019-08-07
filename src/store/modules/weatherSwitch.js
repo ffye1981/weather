@@ -27,7 +27,7 @@ const actions = {
     commit(SET_WEATHER_TYPE, param);
   },
   ACTION_WEATHER_OPTION({ commit, state }, param) {
-    console.log("commit", param);
+    // console.log("commit", param);
     commit(SET_WEATHER_OPTION, param);
   }
 };
@@ -39,7 +39,7 @@ const mutations = {
     state.weatherType = data.weatherType;
   },
   [SET_WEATHER_OPTION](state, data) {
-    console.log("mutations", data);
+    // console.log("mutations", data);
     state.weatherParams = data.weatherParams;
   }
 };

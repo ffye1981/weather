@@ -101,14 +101,14 @@
         computed: {},
         watch: {
             field: function (preVal, newVal) {
-                console.log('改变之前的值：' + preVal + '；改变之后的值：' + newVal)
+                // console.log('改变之前的值：' + preVal + '；改变之后的值：' + newVal)
             }
         },
         created() {
-            console.log('component created')
+            // console.log('component created')
         },
         mounted() {
-            console.log('component mounted')
+            // console.log('component mounted')
             this.index = Math.ceil(new Date().getHours()/3);
             this.calValue()
             this.changeAutoPlay()
@@ -136,7 +136,7 @@
             calValue(methodName) {
               let keys = Object.keys(this.marks)
               if(methodName === "reduce"){
-                console.log("reduce",methodName,this.value,this.index )
+                // console.log("reduce",methodName,this.value,this.index )
                 if(this.index === 0) {
                    this.index = this.index;
                 }else{

@@ -48,11 +48,32 @@ var Windy = function(params) {
   var builder;
   var grid;
   var gridData = params.data;
+
   var date;
   var λ0, φ0, Δλ, Δφ, ni, nj;
 
   var setData = function(data) {
     gridData = data;
+  };
+
+  var setMaxMin = function() {
+    if (gridData) {
+      var speedDataU = gridData[0].data;
+      var speedDataV = gridData[1].data;
+      var speedLength = speedDataU.length;
+      var _min = 10000000000,
+        _max = -10000000000;
+      for (let i = 0; i < speedLength; i++) {
+        var u = speedDataU[i];
+        var v = speedDataV[i];
+
+        var speed = Math.sqrt(u * u + v * v);
+        _min = Math.min(_min, speed);
+        _max = Math.max(_max, speed);
+      }
+      MIN_VELOCITY_INTENSITY = _min;
+      MAX_VELOCITY_INTENSITY = _max;
+    }
   };
 
   // interpolation for vectors like wind (u,v,m)
@@ -124,6 +145,9 @@ var Windy = function(params) {
 
     // Scan mode 0 assumed. Longitude increases from λ0, and latitude decreases from φ0.
     // http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_table3-4.shtml
+
+    // console.log("buildGrid_text", nj, ni, builder, header);
+
     grid = [];
     var p = 0;
     var isContinuous = Math.floor(ni * Δλ) >= 360;
@@ -562,7 +586,8 @@ var Windy = function(params) {
     createField: createField,
     interpolatePoint: interpolate,
     setData: setData,
-    sendWindyDefaulData: sendWindyDefaulData
+    sendWindyDefaulData: sendWindyDefaulData,
+    setMaxMin: setMaxMin
   };
   return windy;
 };
