@@ -33,7 +33,7 @@
         },
         watch: {
           playTime: function (newVal, preVal) {
-              console.log('playTime改变之前的值：' + preVal + '；改变之后的值：' + newVal)
+              // console.log('playTime改变之前的值：' + preVal + '；改变之后的值：' + newVal)
               var hour = new Date(Date.parse(newVal.replace(/-/g, "/"))).getHours();
               if(this.velocityLayer) {
                 this.showLoading = true;
@@ -41,6 +41,13 @@
                 let legendData = this.velocityLayer._getWindyDefaultData();
                 this.updateLegend(legendData);
               }
+              // else{
+              //   this.initLayer();
+
+              //   let legendData = this.velocityLayer._getWindyDefaultData();
+              //   console.log("playTime_legendData", legendData, this.windData);
+              //   this.updateLegend(legendData); 
+              // }
           },
           // weatherType: function (newVal, preVal) {
           //     // console.log('weatherParams改变之前的值：' + preVal + '；改变之后的值：' + newVal)
@@ -64,11 +71,12 @@
                 }
                 this.showLoading = true;
                 this.getData(hour)
-                let legendData = this.velocityLayer._getWindyDefaultData();
-                this.updateLegend(legendData); 
+        
               }else{
                 this.initLayer();
               }
+              let legendData = this.velocityLayer._getWindyDefaultData();
+              this.updateLegend(legendData); 
           },
           loadMapSuccess: function (newVal, preVal) {
               // console.log('loadMapSuccess改变之前的值：' + preVal + '；改变之后的值：' + newVal)
@@ -83,37 +91,14 @@
               if(this.velocityLayer) {
                   // if(newVal.length){
                     this.velocityLayer.setData(newVal);
-                    let legendData = this.velocityLayer._getWindyDefaultData();
-                    this.updateLegend(legendData);
                   // }
                   // console.log("velocityLayer_newVal", newVal, this.velocityLayer._getWindyDefaultData());
                   // this.heatLayer.setGribData(this.windData);
               }else {
-                  this.initLayer();
-                  let defaulColorScale = [
-                    "rgb(36,104, 180)",
-                    "rgb(60,157, 194)",
-                    "rgb(128,205,193 )",
-                    "rgb(151,218,168 )",
-                    "rgb(198,231,181)",
-                    "rgb(238,247,217)",
-                    "rgb(255,238,159)",
-                    "rgb(252,217,125)",
-                    "rgb(255,182,100)",
-                    "rgb(252,150,75)",
-                    "rgb(250,112,52)",
-                    "rgb(245,64,32)",
-                    "rgb(237,45,28)",
-                    "rgb(220,24,32)",
-                    "rgb(180,0,35)"
-                  ];
-                  let legendData = {
-                        minVelocityIntensity: 0,
-                        maxVelocityIntensity: 60,
-                        colorScale: defaulColorScale
-                      };
+                  this.initLayer();  
+              };
+              let legendData = this.velocityLayer._getWindyDefaultData();
                   this.updateLegend(legendData);
-              }
               // this.drawPoint();
           }
         },

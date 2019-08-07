@@ -75,7 +75,7 @@
                     // console.log("sendParams_change",  this.value,  Object.values(item).toString());
                    return Object.values(item).toString().replace(/,/g,'，') == this.value
                 });
-                console.log("sendParams", arrayOptions, this.value, selectOption);
+                // console.log("sendParams", arrayOptions, this.value, selectOption);
                 this.$store.dispatch('ACTION_WEATHER_OPTION', {
                     weatherParams: selectOption, 
                 });

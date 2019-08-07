@@ -15,14 +15,14 @@ export default {
   computed: {},
   watch: {
     field: function(preVal, newVal) {
-      console.log('改变之前的值：' + preVal + '；改变之后的值：' + newVal)
+      // console.log('改变之前的值：' + preVal + '；改变之后的值：' + newVal)
     }
   },
   created() {
-    console.log('component created')
+    // console.log('component created')
   },
   mounted() {
-    console.log('component mounted')
+    // console.log('component mounted')
     this.initMap()
   },
   methods: {
@@ -35,7 +35,7 @@ export default {
         }
       });
       var myDemoInstance = new MyDemoClass();
-      console.log("myDemoInstance", myDemoInstance, myDemoInstance.myDemoMethod, myDemoInstance.myDemoMethod());
+      // console.log("myDemoInstance", myDemoInstance, myDemoInstance.myDemoMethod, myDemoInstance.myDemoMethod());
       MyDemoClass.include({
         _myPrivateProperty: 78,
         myDemoMethod: function(){
@@ -43,7 +43,7 @@ export default {
         }
       })
       var mySecondDemoInstance = new MyDemoClass();
-      console.log("mySecondDemoInstance", mySecondDemoInstance.myDemoMethod(), mySecondDemoInstance.myDemoProperty);
+      // console.log("mySecondDemoInstance", mySecondDemoInstance.myDemoMethod(), mySecondDemoInstance.myDemoProperty);
       var MyBoxClass = L.Class.extend({
         options: {
           width: 1,
@@ -55,19 +55,19 @@ export default {
         }
       })
       var instance = new MyBoxClass("Red", {width: 10});
-      console.log("instance_name", instance.name);
-      console.log("instance_options", instance.options.width, instance.options.height);
+      // console.log("instance_name", instance.name);
+      // console.log("instance_options", instance.options.width, instance.options.height);
       var MyCubeClass = MyBoxClass.extend({
         options: {
           depth: 1
         }
       })
       var cubeContent = new MyCubeClass("Blue");
-      console.log("cubeContent", cubeContent.options.width, cubeContent.options.height, cubeContent.options.depth)
+      // console.log("cubeContent", cubeContent.options.width, cubeContent.options.height, cubeContent.options.depth)
       MyBoxClass.addInitHook(function(){
         this._area = this.options.width * this.options.length;
       })
-      console.log("myboxclass", MyBoxClass, instance._area );
+      // console.log("myboxclass", MyBoxClass, instance._area );
 
       MyCubeClass.include({
         _calculateVolume: function(arg1, arg2){
@@ -75,7 +75,7 @@ export default {
         }
       })
       MyCubeClass.addInitHook("_calculateVolume", argValue1, argValue2);
-      console.log("myboxclass", MyBoxClass, instance._area );
+      // console.log("myboxclass", MyBoxClass, instance._area );
 
     }
   },

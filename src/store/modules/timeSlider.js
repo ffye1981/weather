@@ -25,7 +25,7 @@ const actions = {
 // mutations
 const mutations = {
   [SET_PLAY_TIME](state, data) {
-    console.log("SET_PLAY_TIME", data);
+    // console.log("SET_PLAY_TIME", data);
     state.playTime = data;
   }
 };
