@@ -141,7 +141,7 @@
     height: 25px;
 }
 .fieldCellContent{
-    color: #409EFF;
+    color: #606266;
     margin: 5px 0;
 }
 .selcetContent{
