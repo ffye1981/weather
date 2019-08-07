@@ -222,7 +222,7 @@
             updateLegend: function (data) {
               // the onExtremaChange callback gives us min, max, and the gradientConfig
               // so we can update the legend
-          
+          debugger
               let legendCtx = this.$refs.legendCanvas.getContext('2d');
               let getWindyDefaultData = this.velocityLayer._getWindyDefaultData();
               let max = getWindyDefaultData.maxVelocityIntensity;

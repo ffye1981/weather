@@ -53,6 +53,7 @@ var Windy = function(params) {
 
   var setData = function(data) {
     gridData = data;
+
   };
 
   // interpolation for vectors like wind (u,v,m)
@@ -128,7 +129,7 @@ var Windy = function(params) {
     var p = 0;
     var isContinuous = Math.floor(ni * Δλ) >= 360;
     var _min = 10000000000,
-      _max = 0;
+      _max = -100000000000;
     for (let j = 0; j < nj; j++) {
       var row = [];
       for (let i = 0; i < ni; i++, p++) {
@@ -527,6 +528,7 @@ var Windy = function(params) {
     buildGrid(gridData, function(grid, _min, _max) {
       MIN_VELOCITY_INTENSITY = _min;
       MAX_VELOCITY_INTENSITY = _max;
+      debugger
       // console.log("buildGrid", MIN_VELOCITY_INTENSITY, MAX_VELOCITY_INTENSITY);
       // interpolateField
       interpolateField(
