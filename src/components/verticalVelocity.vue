@@ -170,7 +170,7 @@
             getData(hour) {
                 var that = this;
                 console.log(weatherNameData[this.weatherType], this.playTime, this.weatherParams.atmosphere);
-                this.$http.getData(config.services.baseUrl + weatherNameData[this.weatherType] + "/findOneGrib", {refTime: this.playTime, surfaceValue: parseInt(this.weatherParams.atmosphere) * 1000}, {}, function (data, msg) {
+                this.$http.getData(config.services.baseUrl + weatherNameData[this.weatherType] + "/findOneGrib", {refTime: this.playTime, surfaceValue: parseInt(this.weatherParams.atmosphere) * 100}, {}, function (data, msg) {
                   //  console.log("findOneGrib", data);
                   that.showLoading = true;
                   that.gribData = data;
