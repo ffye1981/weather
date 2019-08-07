@@ -47,10 +47,11 @@
             }
         },
         created() {
-            console.log('component created')
+            // console.log('component created')
         },
         mounted() {
-            console.log('component mounted')
+            // console.log('component mounted');
+            // this.changeType(0);
         },
         methods: {
             changeType(index){
@@ -140,7 +141,7 @@
     height: 25px;
 }
 .fieldCellContent{
-    color: #409EFF;
+    color: #606266;
     margin: 5px 0;
 }
 .selcetContent{
