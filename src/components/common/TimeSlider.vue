@@ -47,51 +47,51 @@
                 marks: {
                   0: {
                     style: {
-                      color: '#ffffff'
+                      color: '#606266'
                     },
-                    label: this.$createElement('strong', '00:00')
+                    label: this.$createElement('span', '00:00')
                   },
                   3: {
                     style: {
-                      color: '#ffffff'
+                      color: '#606266'
                     },
-                    label: this.$createElement('strong', '03:00')
+                    label: this.$createElement('span', '03:00')
                   },
                   6: {
                     style: {
-                      color: '#ffffff'
+                      color: '#606266'
                     },
-                    label: this.$createElement('strong', '06:00')
+                    label: this.$createElement('span', '06:00')
                   },
                   9: {
                     style: {
-                      color: '#ffffff'
+                      color: '#606266'
                     },
-                    label: this.$createElement('strong', '09:00')
+                    label: this.$createElement('span', '09:00')
                   },
                   12: {
                     style: {
-                      color: '#ffffff'
+                      color: '#606266'
                     },
-                    label: this.$createElement('strong', '12:00')
+                    label: this.$createElement('span', '12:00')
                   },
                   15: {
                     style: {
-                      color: '#ffffff'
+                      color: '#606266'
                     },
-                    label: this.$createElement('strong', '15:00')
+                    label: this.$createElement('span', '15:00')
                   },
                   18: {
                     style: {
-                      color: '#ffffff'
+                      color: '#606266'
                     },
-                    label: this.$createElement('strong', '18:00')
+                    label: this.$createElement('span', '18:00')
                   },
                   21: {
                     style: {
-                      color: '#ffffff'
+                      color: '#606266'
                     },
-                    label: this.$createElement('strong', '21:00')
+                    label: this.$createElement('span', '21:00')
                   },
                 },
                 timer: null

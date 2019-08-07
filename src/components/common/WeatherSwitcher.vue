@@ -47,10 +47,11 @@
             }
         },
         created() {
-            console.log('component created')
+            // console.log('component created')
         },
         mounted() {
-            console.log('component mounted')
+            // console.log('component mounted');
+            // this.changeType(0);
         },
         methods: {
             changeType(index){
